@@ -45,7 +45,7 @@ namespace Outfitter
                         //leftEye?.groups.Remove(BodyPartGroupDefOf.FullHead);
                         //rightEye?.groups.Remove(BodyPartGroupDefOf.FullHead);
                         jaw?.groups.Remove(BodyPartGroupDefOf.FullHead);
-                        Log.Message("Outfitter patched Human eyes and jaw.");
+                        if (Prefs.DevMode) Log.Message("Outfitter patched Human eyes and jaw.");
                         break;
                     }
 

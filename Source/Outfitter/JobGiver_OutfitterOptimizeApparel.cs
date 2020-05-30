@@ -214,7 +214,7 @@ namespace Outfitter
                             if (gain > MinScoreGainToCare && gain >= score && otherGain > MinScoreGainToCare)
                             {
                                 score = gain;
-                                Log.Message(
+                                if (Prefs.DevMode) Log.Message(
                                     "OUTFITTER: " + pawn + " wants " + otherAp + " currently worn by " + otherPawn
                                     + ", scores: " + gain + " - " + otherGain + " - " + score);
 

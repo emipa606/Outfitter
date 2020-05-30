@@ -582,7 +582,7 @@ namespace Outfitter
             log += "\nScoreOffsetMin: " + temperatureScoreOffset.min + " - ScoreOffsetMax: "
                    + temperatureScoreOffset.max + " *= " + (temperatureScoreOffset.min * temperatureScoreOffset.max);
 
-            Log.Message(log);
+            if(Prefs.DevMode) Log.Message(log);
             return temperatureScoreOffset.min * temperatureScoreOffset.max;
 
             // return 1 + (temperatureScoreOffset.min + temperatureScoreOffset.max) / 15;
@@ -599,12 +599,10 @@ namespace Outfitter
 
             // offsets on apparel
             insulationCold = apparel.GetStatValue(StatDefOf.Insulation_Cold) * -1;
-            Log.Message(apparel.def.defName + " coldinsulation: " + insulationCold);
             insulationHeat = apparel.GetStatValue(StatDefOf.Insulation_Heat);
 
             insulationCold -= apparel.def.equippedStatOffsets.GetStatOffsetFromList(StatDefOf.Insulation_Cold);
             insulationHeat += apparel.def.equippedStatOffsets.GetStatOffsetFromList(StatDefOf.Insulation_Heat);
-            Log.Message(apparel.def.defName + " after offset: " + insulationCold);
 
             // offsets on apparel infusions
             DoApparelScoreRaw_PawnStatsHandlers(apparel, StatDefOf.ComfyTemperatureMin, out float infInsulationCold);
