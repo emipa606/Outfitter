@@ -1,0 +1,22 @@
+<Defs>
+  <SpecialThingFilterDef>
+    <defName>AllowDeadmansApparel</defName>
+    <label>allow tainted apparel</label>
+    <description>Allow apparel worn by dead poeple</description>
+    <parentCategory>Apparel</parentCategory>
+    <allowedByDefault>true</allowedByDefault>
+    <saveKey>allowDeadmansApparel</saveKey>
+    <workerClass>Outfitter.Filter.SpecialThingFilterWorker_DeadmansApparel</workerClass>
+  </SpecialThingFilterDef>
+  <!--
+  <SpecialThingFilterDef>
+		<defName>ApparelWithoutHitpoints</defName>
+		<label>apparel without hitpoints</label>
+		<description>Allow apparel that uses no hitpoints</description>
+		<parentCategory>Apparel</parentCategory>
+		<allowedByDefault>true</allowedByDefault>
+		<saveKey>allowApparelWithoutHitpoints</saveKey>
+		<workerClass>Outfitter.SpecialThingFilterWorker_ApparelWithoutHitpoints</workerClass>
+	</SpecialThingFilterDef>
+  -->
+</Defs>

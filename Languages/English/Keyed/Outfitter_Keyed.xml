@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <PreferedTemperature>Temperature range</PreferedTemperature>
+  <PreferedStats>Stat priorities</PreferedStats>
+  <StatPriorityReset>Reset priority for {0} to work priorities</StatPriorityReset>
+  <StatPriorityDelete>Remove priority for {0}</StatPriorityDelete>
+  <StatPriorityAdd>Add new priority</StatPriorityAdd>
+  <TemperatureRangeReset>Reset temperature range to seasonal temperature</TemperatureRangeReset>
+  <OutfitterTab>Outfitter</OutfitterTab>
+  <OutfitShow>Show Apparel</OutfitShow>
+  <AddWorkingStats>Add Working Stats</AddWorkingStats>
+  <ToWear>To Wear</ToWear>
+  <ToDrop>To Drop</ToDrop>
+  <AverageStat>Pawn Stat Offset</AverageStat>
+  <AverageWorkStat>Pawn Work Offset</AverageWorkStat>
+  <OutfitterHitPoints>Hit Points Modifier</OutfitterHitPoints>
+  <OutfitterTemperature>Outdoor Temperature</OutfitterTemperature>
+  <OutfitterTotal>Apparel Total Stat</OutfitterTotal>
+  <OutfitterArmor>Protection Score</OutfitterArmor>
+  <BasicStatusOfApparel>Basic Apparel Offset</BasicStatusOfApparel>
+  <OutfitterGlobalSelection>Global Selection</OutfitterGlobalSelection>
+  <AppendIndividualStats>Append Individual Status</AppendIndividualStats>
+  <OutfitterEditOutfit>Edit Outfit</OutfitterEditOutfit>
+  <OutfitterStatus>Status...</OutfitterStatus>
+  <EquipmentAndInventory>Equipment and Inventory</EquipmentAndInventory>
+  <WornApparel>Worn Apparel</WornApparel>
+  <AddWorkStats>Add Work Stats</AddWorkStats>
+  <AddIndividualStats>Add Individual Stats (traits &amp; incidents)</AddIndividualStats>
+  <AddPersonalStats>Add Personal Stats (skills)</AddPersonalStats>
+  <DropThingHaul>Drop and Haul</DropThingHaul>
+  <MainJob>Set Prefered Gear</MainJob>
+  <PreferedGear>Prefered Gear:</PreferedGear>
+  <OutfitterComparer>Compare Apparel Score</OutfitterComparer>
+  <OutfitterSpecialScore>Special Score</OutfitterSpecialScore>
+  <OutfitterWornByCorpse>Worn by corpse</OutfitterWornByCorpse>
+  <OutfitterQuality>Quality modifier</OutfitterQuality>
+  <OutfitterHumanLeather>Human leather</OutfitterHumanLeather>
+  <Settings.UseEyes>Patch eyes and teeth to enable multiple head gear</Settings.UseEyes>
+  <Settings.UseEyesTooltip>Enabling this removes the FullHead body part group from both eyes and the jaw. Use at your own risk.</Settings.UseEyesTooltip>
+  <Settings.UseTailorWorkbenchUI>Use custom categorized bills for apparel on workbenches</Settings.UseTailorWorkbenchUI>
+  <Settings.UseTailorWorkbenchUITooltip>Enabling this will turn on experimental categorization of appareil bills, using a prefilter by covered body parts</Settings.UseTailorWorkbenchUITooltip>
+
+</LanguageData>
