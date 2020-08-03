@@ -6,6 +6,7 @@
   <url>https://github.com/emipa606/Outfitter</url>
   <supportedVersions>
     <li>1.1</li>
+    <li>1.2</li>
   </supportedVersions>
   <modDependencies>
     <li>
@@ -43,7 +44,7 @@ Allows pawns to factor in all kinds of gear stat offsets other than just armor.
 - Takes personal traits like temperature preference or mental states into account.
 - No naked pawns!
 
-Original version of 'Outfitter™' by Fluffy. Original version of 'AutoEquip™' by soulkata.
+Original version of 'Outfitter�' by Fluffy. Original version of 'AutoEquip�' by soulkata.
 This is a fusion of both mods.
 B18, A17, A16 and A15 versions by Killface.
 Updated to B19 by Araelle.
