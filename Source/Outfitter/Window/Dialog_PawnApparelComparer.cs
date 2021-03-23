@@ -9,43 +9,42 @@ namespace Outfitter.Window
 {
     public class Dialog_PawnApparelComparer : Verse.Window
     {
-        [NotNull]
-        private readonly Apparel _apparel;
+        private const float ScoreWidth = 100f;
 
-        [NotNull]
-        private readonly Pawn _pawn;
+        [NotNull] private readonly Apparel _apparel;
+
+        [NotNull] private readonly Pawn _pawn;
+
+        private Dictionary<Apparel, float> _dict;
 
         private Vector2 _scrollPosition;
 
         public Dialog_PawnApparelComparer(Pawn p, Apparel apparel)
         {
-            this.doCloseX = true;
+            doCloseX = true;
             //this.closeOnEscapeKey = true;
-            this.doCloseButton = true;
+            doCloseButton = true;
 
-            this._pawn = p;
-            this._apparel = apparel;
+            _pawn = p;
+            _apparel = apparel;
         }
 
         public override Vector2 InitialSize => new Vector2(500f, 700f);
 
-        private Dictionary<Apparel, float> _dict;
-
-        private const float ScoreWidth = 100f;
-
         public override void DoWindowContents(Rect inRect)
         {
-            ApparelStatCache apparelStatCache = this._pawn.GetApparelStatCache();
-            Outfit currentOutfit = this._pawn.outfits.CurrentOutfit;
+            var apparelStatCache = _pawn.GetApparelStatCache();
+            var currentOutfit = _pawn.outfits.CurrentOutfit;
 
-            if (this._dict == null || Find.TickManager.TicksGame % 60 == 0 || GUI.changed)
+            if (_dict == null || Find.TickManager.TicksGame % 60 == 0 || GUI.changed)
             {
-                List<Apparel> ap = new List<Apparel>(this._pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Apparel).OfType<Apparel>().Where(
+                var ap = new List<Apparel>(_pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Apparel)
+                    .OfType<Apparel>().Where(
                         x => x.Map.haulDestinationManager.SlotGroupAt(x.Position) != null));
 
-                foreach (Pawn otherPawn in PawnsFinder.AllMaps_FreeColonists.Where(x => x.Map == this._pawn.Map))
+                foreach (var otherPawn in PawnsFinder.AllMaps_FreeColonists.Where(x => x.Map == _pawn.Map))
                 {
-                    foreach (Apparel pawnApparel in otherPawn.apparel.WornApparel)
+                    foreach (var pawnApparel in otherPawn.apparel.WornApparel)
                     {
                         if (otherPawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(pawnApparel))
                         {
@@ -55,37 +54,37 @@ namespace Outfitter.Window
                 }
 
                 ap = ap.Where(
-                    i => !ApparelUtility.CanWearTogether(this._apparel.def, i.def, this._pawn.RaceProps.body)
+                    i => !ApparelUtility.CanWearTogether(_apparel.def, i.def, _pawn.RaceProps.body)
                          && currentOutfit.filter.Allows(i)).ToList();
 
 
                 ap = ap.OrderByDescending(
                     i =>
-                        {
-                            float g = this._pawn.ApparelScoreGain(i);
-                            return g;
-                        }).ToList();
+                    {
+                        var g = _pawn.ApparelScoreGain(i);
+                        return g;
+                    }).ToList();
 
-                this._dict = new Dictionary<Apparel, float>();
-                foreach (Apparel currentAppel in ap)
+                _dict = new Dictionary<Apparel, float>();
+                foreach (var currentAppel in ap)
                 {
-                    float gain = this._pawn.ApparelScoreGain(currentAppel);
-                    this._dict.Add(currentAppel, gain);
+                    var gain = _pawn.ApparelScoreGain(currentAppel);
+                    _dict.Add(currentAppel, gain);
                 }
             }
 
-            Rect groupRect = inRect.ContractedBy(10f);
+            var groupRect = inRect.ContractedBy(10f);
             groupRect.height -= 100;
             GUI.BeginGroup(groupRect);
 
 
-            float apparelLabelWidth = (groupRect.width - 2 * ScoreWidth) / 3 - 8f - 8f;
-            float apparelEquippedWidth = apparelLabelWidth;
-            float apparelOwnerWidth = apparelLabelWidth;
+            var apparelLabelWidth = ((groupRect.width - (2 * ScoreWidth)) / 3) - 8f - 8f;
+            var apparelEquippedWidth = apparelLabelWidth;
+            var apparelOwnerWidth = apparelLabelWidth;
 
-            Rect itemRect = new Rect(groupRect.xMin + 4f, groupRect.yMin, groupRect.width - 8f, 28f);
+            var itemRect = new Rect(groupRect.xMin + 4f, groupRect.yMin, groupRect.width - 8f, 28f);
 
-            this.DrawLine(
+            DrawLine(
                 ref itemRect,
                 null,
                 "Apparel",
@@ -105,24 +104,24 @@ namespace Outfitter.Window
             groupRect.height -= 4f;
             groupRect.height -= Text.LineHeight * 1.2f * 3f;
 
-            Rect viewRect = new Rect(
+            var viewRect = new Rect(
                 groupRect.xMin,
                 groupRect.yMin,
-                groupRect.width - 16f, this._dict.Count * 28f + 16f);
+                groupRect.width - 16f, (_dict.Count * 28f) + 16f);
             if (viewRect.height < groupRect.height)
             {
                 groupRect.height = viewRect.height;
             }
 
-            Rect listRect = viewRect.ContractedBy(4f);
+            var listRect = viewRect.ContractedBy(4f);
 
-            Widgets.BeginScrollView(groupRect, ref this._scrollPosition, viewRect);
+            Widgets.BeginScrollView(groupRect, ref _scrollPosition, viewRect);
 
 
-            foreach (KeyValuePair<Apparel, float> kvp in this._dict)
+            foreach (var kvp in _dict)
             {
-                Apparel currentAppel = kvp.Key;
-                float gain = kvp.Value;
+                var currentAppel = kvp.Key;
+                var gain = kvp.Value;
 
                 itemRect = new Rect(listRect.xMin, listRect.yMin, listRect.width, 28f);
                 if (Mouse.IsOver(itemRect))
@@ -131,14 +130,13 @@ namespace Outfitter.Window
                     GUI.color = Color.white;
                 }
 
-                Pawn equipped = currentAppel.Wearer;
-                Pawn target = null;
+                var equipped = currentAppel.Wearer;
 
-                string gainString = this._pawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(currentAppel)
-                                        ? gain.ToString("N3")
-                                        : "No Allow";
+                var gainString = _pawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(currentAppel)
+                    ? gain.ToString("N3")
+                    : "No Allow";
 
-                this.DrawLine(
+                DrawLine(
                     ref itemRect,
                     currentAppel,
                     currentAppel.LabelCap,
@@ -146,12 +144,12 @@ namespace Outfitter.Window
                     equipped,
                     equipped?.LabelCap,
                     apparelEquippedWidth,
-                    target,
-                    target?.LabelCap,
+                    null,
+                    null,
                     apparelOwnerWidth,
                     apparelStatCache.ApparelScoreRaw(currentAppel).ToString("N3"),
                     gainString
-                    );
+                );
 
                 listRect.yMin = itemRect.yMax;
             }
@@ -180,7 +178,7 @@ namespace Outfitter.Window
             string apparelGainText)
         {
             Rect fieldRect;
-            bool isCurrentlyWorn = equippedPawn != null;
+            var isCurrentlyWorn = equippedPawn != null;
 
             if (apparelThing != null)
             {
@@ -197,7 +195,7 @@ namespace Outfitter.Window
 
                 if (Widgets.ButtonInvisible(fieldRect))
                 {
-                    this.Close();
+                    Close();
                     Find.MainTabsRoot.EscapeCurrentTab();
                     if (isCurrentlyWorn)
                     {
@@ -249,7 +247,7 @@ namespace Outfitter.Window
 
                 if (Widgets.ButtonInvisible(fieldRect))
                 {
-                    this.Close();
+                    Close();
                     Find.MainTabsRoot.EscapeCurrentTab();
                     Find.CameraDriver.JumpToCurrentMapLoc(equippedPawn.PositionHeld);
                     Find.Selector.ClearSelection();
@@ -304,6 +302,7 @@ namespace Outfitter.Window
             {
                 GUI.color = new Color(0.6f, 0.6f, 0.6f);
             }
+
             Text.Anchor = TextAnchor.UpperRight;
             Widgets.Label(fieldRect, apparelScoreText);
 
@@ -312,13 +311,15 @@ namespace Outfitter.Window
             Text.Anchor = TextAnchor.UpperRight;
             Widgets.Label(new Rect(itemRect.xMin, itemRect.yMin, ScoreWidth, itemRect.height), apparelGainText);
             GUI.color = Color.white;
-            if (apparelThing != null)
+            if (apparelThing == null)
             {
-                Text.Anchor = TextAnchor.UpperLeft;
-                if (Widgets.ButtonInvisible(fieldRect))
-                {
-                    Find.WindowStack.Add(new Window_Pawn_ApparelDetail(this._pawn, apparelThing));
-                }
+                return;
+            }
+
+            Text.Anchor = TextAnchor.UpperLeft;
+            if (Widgets.ButtonInvisible(fieldRect))
+            {
+                Find.WindowStack.Add(new Window_Pawn_ApparelDetail(_pawn, apparelThing));
             }
         }
     }

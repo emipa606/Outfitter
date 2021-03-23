@@ -12,12 +12,12 @@ namespace Outfitter
         // ReSharper disable once FieldCanBeMadeReadOnly.Global
         public static Dictionary<Apparel, ApparelEntry> ApparelEntries = new Dictionary<Apparel, ApparelEntry>();
 
-        public static Dictionary<Apparel, FloatRange> InsulationDict = new Dictionary<Apparel, FloatRange>();
+        public static readonly Dictionary<Apparel, FloatRange> InsulationDict = new Dictionary<Apparel, FloatRange>();
 
         public static float GetEquippedStatValue([NotNull] this Apparel apparel, Pawn pawn, StatDef stat)
         {
-            float baseStat = pawn.def.statBases.GetStatValueFromList(stat, stat.defaultBaseValue);
-            float equippedStatValue = apparel.def.equippedStatOffsets.GetStatOffsetFromList(stat);
+            var baseStat = pawn.def.statBases.GetStatValueFromList(stat, stat.defaultBaseValue);
+            var equippedStatValue = apparel.def.equippedStatOffsets.GetStatOffsetFromList(stat);
 
             if (!ApparelStatCache.SpecialStats.Contains(stat) && Math.Abs(baseStat) > 0f)
             {
@@ -38,18 +38,18 @@ namespace Outfitter
             // {
             // return apparel.def.equippedStatOffsets.GetStatOffsetFromList(stat.StatDef) - baseStat;
             // }
-            return equippedStatValue;
+            // return equippedStatValue;
         }
 
         public static SaveablePawn GetSaveablePawn(this Pawn pawn)
         {
-            GameComponent_Outfitter outfitter = Current.Game.GetComponent<GameComponent_Outfitter>();
-            foreach (SaveablePawn c in outfitter.PawnCache.Where(c => c.Pawn == pawn))
+            var outfitter = Current.Game.GetComponent<GameComponent_Outfitter>();
+            foreach (var c in outfitter.PawnCache.Where(c => c.Pawn == pawn))
             {
                 return c;
             }
 
-            SaveablePawn n = new SaveablePawn { Pawn = pawn };
+            var n = new SaveablePawn {Pawn = pawn};
             outfitter.PawnCache.Add(n);
             return n;
 
@@ -59,6 +59,5 @@ namespace Outfitter
             // }
             // return PawnApparelStatCaches[pawn];
         }
-
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 using RimWorld;
@@ -17,7 +16,7 @@ namespace Outfitter
 
         // private const int ApparelOptimizeCheckIntervalMin = 9000;
         // private const int ApparelOptimizeCheckIntervalMax = 12000;
-        public const float MinScoreGainToCare = 0.09f;
+        private const float MinScoreGainToCare = 0.09f;
 
         #endregion Public Fields
 
@@ -34,7 +33,7 @@ namespace Outfitter
         #region Public Methods
 
         // private static Apparel lastItem;
-        public static void SetNextOptimizeTick([NotNull] Pawn pawn)
+        private static void SetNextOptimizeTick([NotNull] Pawn pawn)
         {
             pawn.mindState.nextApparelOptimizeTick = Find.TickManager.TicksGame
                                                      + Random.Range(
@@ -44,6 +43,26 @@ namespace Outfitter
             pawn.GetApparelStatCache().RawScoreDict.Clear();
 
             // pawn.GetApparelStatCache().recentApparel.Clear();
+        }
+
+        private static bool CanWearApparel(Pawn pawn, Apparel apparel)
+        {
+            if (EquipmentUtility.IsBiocoded(apparel) && !EquipmentUtility.IsBiocodedFor(apparel, pawn))
+            {
+                return false;
+            }
+
+            if (pawn.apparel.WouldReplaceLockedApparel(apparel))
+            {
+                return false;
+            }
+
+            if (apparel.IsForbidden(pawn))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         // private static NeededWarmth neededWarmth;
@@ -78,39 +97,42 @@ namespace Outfitter
                 _debugSb.AppendLine(string.Concat("Outfiter scanning for ", pawn, " at ", pawn.Position));
             }
 
-            Outfit currentOutfit = pawn.outfits.CurrentOutfit;
-            List<Apparel> wornApparel = pawn.apparel.WornApparel;
+            var currentOutfit = pawn.outfits.CurrentOutfit;
+            var wornApparel = pawn.apparel.WornApparel;
 
-            for (int i = 0; i < wornApparel.Count; i++)
+            foreach (var ap in wornApparel)
             {
-                Apparel ap = wornApparel[i];
-                ApparelStatCache conf = pawn.GetApparelStatCache();
+                var conf = pawn.GetApparelStatCache();
 
-                bool notAllowed = !currentOutfit.filter.Allows(ap)
-                                  && pawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(ap);
+                var notAllowed = !currentOutfit.filter.Allows(ap)
+                                 && pawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(ap);
 
-                bool shouldDrop = conf.ApparelScoreRaw(ap) < 0f
-                                  && pawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(ap);
+                var shouldDrop = conf.ApparelScoreRaw(ap) < 0f
+                                 && pawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(ap);
 
-                bool someoneWantsIt = pawn.GetApparelStatCache().ToDropList.ContainsKey(ap);
+                var someoneWantsIt = pawn.GetApparelStatCache().ToDropList.ContainsKey(ap);
 
-                if (notAllowed || shouldDrop || someoneWantsIt)
+                if (!notAllowed && !shouldDrop && !someoneWantsIt)
                 {
-                    __result = new Job(JobDefOf.RemoveApparel, ap) { haulDroppedApparel = true };
-                    if (someoneWantsIt)
-                    {
-                        pawn.GetApparelStatCache().ToDropList[ap].mindState.nextApparelOptimizeTick = -5000;
-                        pawn.GetApparelStatCache().ToDropList[ap].mindState.Notify_OutfitChanged();
-                        pawn.GetApparelStatCache().ToDropList.Remove(ap);
-                    }
+                    continue;
+                }
 
+                __result = new Job(JobDefOf.RemoveApparel, ap) {haulDroppedApparel = true};
+                if (!someoneWantsIt)
+                {
                     return false;
                 }
+
+                pawn.GetApparelStatCache().ToDropList[ap].mindState.nextApparelOptimizeTick = -5000;
+                pawn.GetApparelStatCache().ToDropList[ap].mindState.Notify_OutfitChanged();
+                pawn.GetApparelStatCache().ToDropList.Remove(ap);
+
+                return false;
             }
 
             Thing thing = null;
-            float score = 0f;
-            List<Thing> list = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Apparel);
+            var score = 0f;
+            var list = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Apparel);
 
             if (list.Count == 0)
             {
@@ -118,10 +140,9 @@ namespace Outfitter
                 return false;
             }
 
-            for (int i = 0; i < list.Count; i++)
+            foreach (var t in list)
             {
-                Thing t = list[i];
-                Apparel apparel = (Apparel)t;
+                var apparel = (Apparel) t;
 
                 // Not allowed
                 if (!currentOutfit.filter.Allows(apparel))
@@ -135,13 +156,12 @@ namespace Outfitter
                     continue;
                 }
 
-                // Forbidden
-                if (apparel.IsForbidden(pawn))
+                if (!CanWearApparel(pawn, apparel))
                 {
                     continue;
                 }
 
-                float gain = pawn.ApparelScoreGain(apparel);
+                var gain = pawn.ApparelScoreGain(apparel);
 
                 // this blocks pawns constantly switching between the recent apparel, due to shifting calculations
                 // not very elegant but working
@@ -177,17 +197,23 @@ namespace Outfitter
                 //      }
                 //  }
 
-                if (gain >= MinScoreGainToCare && gain >= score)
+                if (!(gain >= MinScoreGainToCare) || !(gain >= score))
                 {
-                    if (ApparelUtility.HasPartsToWear(pawn, apparel.def))
-                    {
-                        if (pawn.CanReserveAndReach(apparel, PathEndMode.OnCell, pawn.NormalMaxDanger()))
-                        {
-                            thing = apparel;
-                            score = gain;
-                        }
-                    }
+                    continue;
                 }
+
+                if (!ApparelUtility.HasPartsToWear(pawn, apparel.def))
+                {
+                    continue;
+                }
+
+                if (!pawn.CanReserveAndReach(apparel, PathEndMode.OnCell, pawn.NormalMaxDanger()))
+                {
+                    continue;
+                }
+
+                thing = apparel;
+                score = gain;
             }
 
             if (DebugViewSettings.debugApparelOptimize)
@@ -200,31 +226,38 @@ namespace Outfitter
             // New stuff
             if (false)
             {
-                IEnumerable<Pawn> list2 =
+                var list2 =
                     pawn.Map.mapPawns.FreeColonistsSpawned.Where(x => x.IsColonistPlayerControlled);
-                foreach (Apparel ap in wornApparel)
+                foreach (var ap in wornApparel)
                 {
-                    foreach (Pawn otherPawn in list2)
+                    foreach (var otherPawn in list2)
                     {
-                        foreach (Apparel otherAp in otherPawn.apparel.WornApparel.Where(
+                        foreach (var otherAp in otherPawn.apparel.WornApparel.Where(
                             x => !ApparelUtility.CanWearTogether(ap.def, x.def, pawn.RaceProps.body)))
                         {
-                            float gain = pawn.ApparelScoreGain(otherAp);
-                            float otherGain = otherPawn.ApparelScoreGain(ap);
-                            if (gain > MinScoreGainToCare && gain >= score && otherGain > MinScoreGainToCare)
+                            var gain = pawn.ApparelScoreGain(otherAp);
+                            var otherGain = otherPawn.ApparelScoreGain(ap);
+                            if (!(gain > MinScoreGainToCare) || !(gain >= score) || !(otherGain > MinScoreGainToCare))
                             {
-                                score = gain;
-                                if (Prefs.DevMode) Log.Message(
+                                continue;
+                            }
+
+                            score = gain;
+                            if (Prefs.DevMode)
+                            {
+                                Log.Message(
                                     "OUTFITTER: " + pawn + " wants " + otherAp + " currently worn by " + otherPawn
                                     + ", scores: " + gain + " - " + otherGain + " - " + score);
-
-                                if (!otherPawn.GetApparelStatCache().ToDropList.ContainsKey(ap))
-                                {
-                                    otherPawn.GetApparelStatCache().ToDropList.Add(otherAp, otherPawn);
-                                    otherPawn.mindState.nextApparelOptimizeTick = -5000;
-                                    otherPawn.mindState.Notify_OutfitChanged();
-                                }
                             }
+
+                            if (otherPawn.GetApparelStatCache().ToDropList.ContainsKey(ap))
+                            {
+                                continue;
+                            }
+
+                            otherPawn.GetApparelStatCache().ToDropList.Add(otherAp, otherPawn);
+                            otherPawn.mindState.nextApparelOptimizeTick = -5000;
+                            otherPawn.mindState.Notify_OutfitChanged();
                         }
                     }
                 }

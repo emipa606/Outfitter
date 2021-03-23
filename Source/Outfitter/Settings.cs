@@ -5,35 +5,35 @@ namespace Outfitter
 {
     public class Settings : ModSettings
     {
-        public bool UseEyes => this._useEyes;
-
-        public bool UseCustomTailorWorkbench => this._useCustomTailorWorkbench;
+        private bool _useCustomTailorWorkbench;
 
         private bool _useEyes;
-        private bool _useCustomTailorWorkbench;
+        public bool UseEyes => _useEyes;
+
+        public bool UseCustomTailorWorkbench => _useCustomTailorWorkbench;
 
         public void DoWindowContents(Rect inRect)
         {
-            Listing_Standard list = new Listing_Standard { ColumnWidth = inRect.width / 2 };
+            var list = new Listing_Standard {ColumnWidth = inRect.width / 2};
             list.Begin(inRect);
 
             list.Gap();
 
             list.CheckboxLabeled(
                 "Settings.UseEyes".Translate(),
-                ref this._useEyes,
+                ref _useEyes,
                 "Settings.UseEyesTooltip".Translate());
 
             list.CheckboxLabeled(
                 "Settings.UseTailorWorkbenchUI".Translate(),
-                ref this._useCustomTailorWorkbench,
+                ref _useCustomTailorWorkbench,
                 "Settings.UseTailorWorkbenchUITooltip".Translate());
 
             list.End();
 
             if (GUI.changed)
             {
-                this.Mod.WriteSettings();
+                Mod.WriteSettings();
             }
 
             // FlexibleSpace();
@@ -61,8 +61,8 @@ namespace Outfitter
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look(ref this._useEyes, "useEyes", false, true);
-            Scribe_Values.Look(ref this._useCustomTailorWorkbench, "useCustomTailorWorkbench", false, true);
+            Scribe_Values.Look(ref _useEyes, "useEyes", false, true);
+            Scribe_Values.Look(ref _useCustomTailorWorkbench, "useCustomTailorWorkbench", false, true);
         }
     }
 }

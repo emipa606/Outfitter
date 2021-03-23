@@ -26,36 +26,51 @@
     <li>brrainz.harmony</li>
     <li>Alias.DegeneralizeWork</li>
   </loadAfter>
-  <description>Update of Aras mod for RimWorld 1.1
+  <description>[img]https://i.imgur.com/WAEzk68.png[/img]
+Update of Aras mod
 https://steamcommunity.com/sharedfiles/filedetails/?id=1525516966
 
-[img]https://i.imgur.com/GYswkZ7.png[/img]
+- Fixed the Cold Isolation bug
 
-Support-chat:
-https://invite.gg/mlie
+[img]https://i.imgur.com/7Gzt3Rg.png[/img]
 
-Non-steam version:
-https://github.com/emipa606/Outfitter
+[table]
+	[tr]
+		[td][url=https://invite.gg/Mlie][img]https://i.imgur.com/zdzzBrc.png[/img][/url][/td]
+		[td][url=https://github.com/emipa606/Outfitter][img]https://i.imgur.com/kTkpTOE.png[/img][/url][/td]
+	[/tr]
+[/table]
 	
---- Original Description ---
+[img]https://i.imgur.com/NOW7jU1.png[/img]
+
 Allows pawns to factor in all kinds of gear stat offsets other than just armor.
-- Defaults to sensible priorities based on work types assigned and map seasonal temperatures.
-- Allows you to finetune, add and/or remove priorities.
-- Takes personal traits like temperature preference or mental states into account.
-- No naked pawns!
+    - Defaults to sensible priorities based on work types assigned and map seasonal temperatures.
+    - Allows you to finetune, add and/or remove priorities.
+    - Takes personal traits like temperature preference or mental states into account.
+    - No naked pawns!
 
-Original version of 'Outfitter�' by Fluffy. Original version of 'AutoEquip�' by soulkata.
-This is a fusion of both mods.
-B18, A17, A16 and A15 versions by Killface.
-Updated to B19 by Araelle.
+    Original version of 'Outfitter™' by Fluffy. Original version of 'AutoEquip™' by soulkata.
+    This is a fusion of both mods.
+    B18, A17, A16 and A15 versions by Killface.
+    Updated to B19 by Araelle.
+	
+    DISCLAIMER: I am not a C# expert! in fact i just picked it up to update this mod.
+    It is provided AS IS. I will try my best to support it, but don't expect miracles.
+	
+    Please report bugs, compatibility issues and so on.
 
-DISCLAIMER: I am not a C# expert! in fact i just picked it up to update this mod.
-It is provided AS IS. I will try my best to support it, but don't expect miracles.
+    Also supports Fluffy's ModManager
 
-Please report bugs, compatibility issues and so on.
 
-GitHub: https://github.com/paulollivier/RW_Outfitter
-Patch for Infused - https://steamcommunity.com/sharedfiles/filedetails/?id=1525520790
-Also supports Fluffy's ModManager
-  </description>
+[img]https://i.imgur.com/Rs6T6cr.png[/img]
+[list]
+[*] See if the the error persists if you just have this mod and its requirements active.
+[*] If not, try adding your other mods until it happens again.
+[*] Post your error-log using [url=https://steamcommunity.com/workshop/filedetails/?id=818773962]HugsLib[/url] and command Ctrl+F12
+[*] For best support, please use the Discord-channel for error-reporting.
+[*] Do not report errors by making a discussion-thread, I get no notification of that.
+[*] If you have the solution for a problem, please post it to the GitHub repository.
+[/list]
+</description>
 </ModMetaData>
+

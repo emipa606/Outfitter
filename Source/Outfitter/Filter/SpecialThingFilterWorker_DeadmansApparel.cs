@@ -12,8 +12,7 @@ namespace Outfitter.Filter
 
         public override bool Matches(Thing t)
         {
-            Apparel apparel = t as Apparel;
-            return apparel != null && apparel.WornByCorpse;
+            return t is Apparel apparel && apparel.WornByCorpse;
         }
     }
 }

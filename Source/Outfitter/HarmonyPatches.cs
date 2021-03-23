@@ -18,7 +18,6 @@ using Verse;
 [StaticConstructorOnStartup]
 internal static class HarmonyPatches
 {
-
     static HarmonyPatches()
     {
         var harmony = new Harmony("com.outfitter.rimworld.mod");
@@ -37,8 +36,7 @@ internal static class HarmonyPatches
             AccessTools.Method(typeof(JobGiver_OptimizeApparel), "TryGiveJob"),
             new HarmonyMethod(
                 typeof(JobGiver_OutfitterOptimizeApparel),
-                nameof(JobGiver_OutfitterOptimizeApparel.TryGiveJob_Prefix)),
-            null);
+                nameof(JobGiver_OutfitterOptimizeApparel.TryGiveJob_Prefix)));
 
         harmony.Patch(
             AccessTools.Method(typeof(Pawn_WorkSettings), nameof(Pawn_WorkSettings.SetPriority)),
@@ -52,13 +50,11 @@ internal static class HarmonyPatches
 
         harmony.Patch(
             AccessTools.Method(typeof(ITab_Bills), "FillTab"),
-            new HarmonyMethod(typeof(Tab_Bills_Patch), nameof(Tab_Bills_Patch.FillTab_Prefix)),
-            null);
+            new HarmonyMethod(typeof(Tab_Bills_Patch), nameof(Tab_Bills_Patch.FillTab_Prefix)));
 
         harmony.Patch(
             AccessTools.Method(typeof(ITab_Bills), "TabUpdate"),
-            new HarmonyMethod(typeof(Tab_Bills_Patch), nameof(Tab_Bills_Patch.TabUpdate_Prefix)),
-            null);
+            new HarmonyMethod(typeof(Tab_Bills_Patch), nameof(Tab_Bills_Patch.TabUpdate_Prefix)));
 
         // harmony.Patch(
         // AccessTools.Method(typeof(ThinkNode_JobGiver), nameof(ThinkNode_JobGiver.TryIssueJobPackage)),
@@ -83,9 +79,9 @@ internal static class HarmonyPatches
 
     private static void UpdatePriorities(Pawn_WorkSettings __instance)
     {
-        FieldInfo fieldInfo =
+        var fieldInfo =
             typeof(Pawn_WorkSettings).GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance);
-        Pawn pawn = (Pawn)fieldInfo?.GetValue(__instance);
+        var pawn = (Pawn) fieldInfo?.GetValue(__instance);
         if (pawn != null)
         {
             pawn.GetSaveablePawn().ForceStatUpdate = true;

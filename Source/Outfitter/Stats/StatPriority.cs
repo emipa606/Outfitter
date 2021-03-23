@@ -16,18 +16,18 @@ namespace Outfitter
     {
         public StatPriority(StatDef stat, float priority, StatAssignment assignment = StatAssignment.Automatic)
         {
-            this.Stat = stat;
-            this.Weight = priority;
-            this.Assignment = assignment;
+            Stat = stat;
+            Weight = priority;
+            Assignment = assignment;
         }
 
         public StatPriority(
             KeyValuePair<StatDef, float> statDefWeightPair,
             StatAssignment assignment = StatAssignment.Automatic)
         {
-            this.Stat = statDefWeightPair.Key;
-            this.Weight = statDefWeightPair.Value;
-            this.Assignment = assignment;
+            Stat = statDefWeightPair.Key;
+            Weight = statDefWeightPair.Value;
+            Assignment = assignment;
         }
 
         public StatAssignment Assignment { get; set; }
@@ -40,28 +40,28 @@ namespace Outfitter
         {
             pawn.GetApparelStatCache().Cache.Remove(this);
 
-            pawn.GetSaveablePawn().Stats.RemoveAll(i => i.Stat == this.Stat);
+            pawn.GetSaveablePawn().Stats.RemoveAll(i => i.Stat == Stat);
         }
 
         public void Reset(Pawn pawn)
         {
-            Dictionary<StatDef, float> stats = pawn.GetWeightedApparelStats();
-            Dictionary<StatDef, float> indiStats = pawn.GetWeightedApparelIndividualStats();
+            var stats = pawn.GetWeightedApparelStats();
+            var indiStats = pawn.GetWeightedApparelIndividualStats();
 
-            if (stats.ContainsKey(this.Stat))
+            if (stats.ContainsKey(Stat))
             {
-                this.Weight = stats[this.Stat];
-                this.Assignment = StatAssignment.Automatic;
+                Weight = stats[Stat];
+                Assignment = StatAssignment.Automatic;
             }
 
-            if (indiStats.ContainsKey(this.Stat))
+            if (indiStats.ContainsKey(Stat))
             {
-                this.Weight = indiStats[this.Stat];
-                this.Assignment = StatAssignment.Individual;
+                Weight = indiStats[Stat];
+                Assignment = StatAssignment.Individual;
             }
 
-            SaveablePawn pawnSave = pawn.GetSaveablePawn();
-            pawnSave.Stats.RemoveAll(i => i.Stat == this.Stat);
+            var pawnSave = pawn.GetSaveablePawn();
+            pawnSave.Stats.RemoveAll(i => i.Stat == Stat);
         }
     }
 

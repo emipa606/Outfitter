@@ -10,8 +10,7 @@ namespace Outfitter
     {
         private readonly Game _game;
 
-        [NotNull]
-        public List<SaveablePawn> PawnCache = new List<SaveablePawn>();
+        [NotNull] public List<SaveablePawn> PawnCache = new List<SaveablePawn>();
 
         public GameComponent_Outfitter()
         {
@@ -20,39 +19,43 @@ namespace Outfitter
         // ReSharper disable once UnusedMember.Global
         public GameComponent_Outfitter(Game game)
         {
-            this._game = game;
+            _game = game;
             if (Controller.Settings.UseEyes)
             {
-                foreach (BodyDef bodyDef in DefDatabase<BodyDef>.AllDefsListForReading)
+                foreach (var bodyDef in DefDatabase<BodyDef>.AllDefsListForReading)
                 {
                     if (bodyDef.defName != "Human")
                     {
                         continue;
                     }
 
-                    BodyPartRecord neck = bodyDef.corePart.parts.FirstOrDefault(x => x.def == BodyPartDefOf.Neck);
-                    BodyPartRecord head = neck?.parts.FirstOrDefault(x => x.def == BodyPartDefOf.Head);
+                    var neck = bodyDef.corePart.parts.FirstOrDefault(x => x.def == BodyPartDefOf.Neck);
+                    var head = neck?.parts.FirstOrDefault(x => x.def == BodyPartDefOf.Head);
                     if (head == null)
                     {
                         continue;
                     }
+
                     //    if (!head.groups.Contains(BodyPartGroupDefOf.Eyes))
                     {
                         //     head.groups.Add(BodyPartGroupDefOf.Eyes);
                         //BodyPartRecord leftEye = head.parts.FirstOrDefault(x => x.def == BodyPartDefOf.LeftEye);
                         //BodyPartRecord rightEye = head.parts.FirstOrDefault(x => x.def == BodyPartDefOf.RightEye);
-                        BodyPartRecord jaw = head.parts.FirstOrDefault(x => x.def == BodyPartDefOf.Jaw);
+                        var jaw = head.parts.FirstOrDefault(x => x.def == BodyPartDefOf.Jaw);
                         //leftEye?.groups.Remove(BodyPartGroupDefOf.FullHead);
                         //rightEye?.groups.Remove(BodyPartGroupDefOf.FullHead);
                         jaw?.groups.Remove(BodyPartGroupDefOf.FullHead);
-                        if (Prefs.DevMode) Log.Message("Outfitter patched Human eyes and jaw.");
+                        if (Prefs.DevMode)
+                        {
+                            Log.Message("Outfitter patched Human eyes and jaw.");
+                        }
+
                         break;
                     }
-
                 }
             }
 
-            foreach (ThingDef def in DefDatabase<ThingDef>.AllDefsListForReading.Where(
+            foreach (var def in DefDatabase<ThingDef>.AllDefsListForReading.Where(
                 td => td.category == ThingCategory.Pawn && td.race.Humanlike))
             {
                 // if (def.inspectorTabs == null)
@@ -83,7 +86,7 @@ namespace Outfitter
         {
             base.ExposeData();
 
-            Scribe_Collections.Look(ref this.PawnCache, "Pawns", LookMode.Deep);
+            Scribe_Collections.Look(ref PawnCache, "Pawns", LookMode.Deep);
         }
     }
 }

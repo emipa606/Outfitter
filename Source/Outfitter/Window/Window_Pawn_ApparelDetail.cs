@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Outfitter.Textures;
@@ -20,9 +19,10 @@ namespace Outfitter
             new GUIStyle
             {
                 fontStyle = FontStyle.Bold,
-                normal = {
-                                textColor = Color.white
-                             },
+                normal =
+                {
+                    textColor = Color.white
+                },
                 padding = new RectOffset(0, 0, 12, 6)
             };
 
@@ -31,34 +31,35 @@ namespace Outfitter
             {
                 fontStyle = FontStyle.Bold,
                 fontSize = 16,
-                normal = {
-                                textColor = Color.white
-                             },
+                normal =
+                {
+                    textColor = Color.white
+                },
                 padding = new RectOffset(0, 0, 12, 6)
             };
 
-        private readonly GUIStyle _hoverBox = new GUIStyle { hover = { background = OutfitterTextures.BgColor } };
+        private readonly GUIStyle _hoverBox = new GUIStyle {hover = {background = OutfitterTextures.BgColor}};
 
         private readonly Pawn _pawn;
 
-        private readonly GUIStyle _whiteLine = new GUIStyle { normal = { background = OutfitterTextures.White } };
-
-        private Vector2 _scrollPosition;
+        private readonly GUIStyle _whiteLine = new GUIStyle {normal = {background = OutfitterTextures.White}};
 
         private Def _def;
+
+        private Vector2 _scrollPosition;
 
         private ThingDef _stuff;
 
         public Window_Pawn_ApparelDetail(Pawn pawn, Apparel apparel)
         {
-            this.doCloseX = true;
-            this.closeOnClickedOutside = true;
+            doCloseX = true;
+            closeOnClickedOutside = true;
             //this.closeOnEscapeKey = true;
-            this.doCloseButton = true;
-            this.preventCameraMotion = false;
+            doCloseButton = true;
+            preventCameraMotion = false;
 
-            this._pawn = pawn;
-            this._apparel = apparel;
+            _pawn = pawn;
+            _apparel = apparel;
         }
 
         public override Vector2 InitialSize => new Vector2(510f, 550f);
@@ -68,12 +69,12 @@ namespace Outfitter
         {
             get
             {
-                if (this._apparel != null)
+                if (_apparel != null)
                 {
-                    return this._apparel.def;
+                    return _apparel.def;
                 }
 
-                return this._def;
+                return _def;
             }
         }
 
@@ -82,19 +83,19 @@ namespace Outfitter
             get
             {
                 // thing selected is a pawn
-                if (this.SelPawn == null)
+                if (SelPawn == null)
                 {
                     return false;
                 }
 
                 // of this colony
-                if (this.SelPawn.Faction != Faction.OfPlayer)
+                if (SelPawn.Faction != Faction.OfPlayer)
                 {
                     return false;
                 }
 
                 // and has apparel (that should block everything without apparel, animals, bots, that sort of thing)
-                if (this.SelPawn.apparel == null)
+                if (SelPawn.apparel == null)
                 {
                     return false;
                 }
@@ -107,9 +108,9 @@ namespace Outfitter
 
         public override void DoWindowContents(Rect inRect)
         {
-            ApparelStatCache conf = this._pawn.GetApparelStatCache();
+            var conf = _pawn.GetApparelStatCache();
 
-            Rect conRect = new Rect(inRect);
+            var conRect = new Rect(inRect);
 
             conRect.height -= 50f;
 
@@ -118,25 +119,25 @@ namespace Outfitter
             // begin main group
             BeginVertical();
 
-            Label(this.GetTitle(), this._headline);
+            Label(GetTitle(), _headline);
             Text.Font = GameFont.Small;
 
             // GUI.BeginGroup(contentRect);
-            float labelWidth = conRect.width - BaseValue - BaseValue - BaseValue - 48f;
+            var labelWidth = conRect.width - BaseValue - BaseValue - BaseValue - 48f;
 
-            this.DrawLine("Status", labelWidth, "BaseMod", "Strength", "Score", this._fontBold);
+            DrawLine("Status", labelWidth, "BaseMod", "Strength", "Score", _fontBold);
 
             Space(6f);
-            Label(string.Empty, this._whiteLine, Height(1));
+            Label(string.Empty, _whiteLine, Height(1));
             Space(6f);
 
-            ApparelEntry apparelEntry = conf.GetAllOffsets(this._apparel);
+            var apparelEntry = conf.GetAllOffsets(_apparel);
 
-            HashSet<StatDef> equippedOffsets = apparelEntry.EquippedOffsets;
-            HashSet<StatDef> statBases = apparelEntry.StatBases;
-            HashSet<StatDef> infusedOffsets = apparelEntry.InfusedOffsets;
+            var equippedOffsets = apparelEntry.EquippedOffsets;
+            var statBases = apparelEntry.StatBases;
+            var infusedOffsets = apparelEntry.InfusedOffsets;
 
-            this._scrollPosition = BeginScrollView(this._scrollPosition, Width(conRect.width));
+            _scrollPosition = BeginScrollView(_scrollPosition, Width(conRect.width));
 
             // relevant apparel stats
 
@@ -144,10 +145,10 @@ namespace Outfitter
             float score = 1;
 
             // add values for each statdef modified by the apparel
-            foreach (StatPriority statPriority in this._pawn.GetApparelStatCache().StatCache
+            foreach (var statPriority in _pawn.GetApparelStatCache().StatCache
                 .OrderBy(i => i.Stat.LabelCap))
             {
-                StatDef stat = statPriority.Stat;
+                var stat = statPriority.Stat;
                 string statLabel = stat.LabelCap;
 
                 // statbases, e.g. armor
@@ -155,11 +156,12 @@ namespace Outfitter
                 // StatCache.DoApparelScoreRaw_PawnStatsHandlers(_pawn, _apparel, statPriority.Stat, ref currentStat);
                 if (statBases.Contains(stat))
                 {
-                    float statValue = this._apparel.GetStatValue(stat);
-                    float statScore = 0f;
+                    var statValue = _apparel.GetStatValue(stat);
+                    var statScore = 0f;
                     if (ApparelStatCache.SpecialStats.Contains(stat))
                     {
-                        ApparelStatCache.CalculateScoreForSpecialStats(this._apparel, statPriority, this._pawn, statValue, ref statScore);
+                        ApparelStatCache.CalculateScoreForSpecialStats(_apparel, statPriority, _pawn, statValue,
+                            ref statScore);
                     }
                     else
                     {
@@ -169,7 +171,7 @@ namespace Outfitter
 
                     score += statScore;
 
-                    this.DrawLine(
+                    DrawLine(
                         statLabel,
                         labelWidth,
                         statValue.ToStringPercent("N1"),
@@ -179,13 +181,14 @@ namespace Outfitter
 
                 if (equippedOffsets.Contains(stat))
                 {
-                    float statValue = this._apparel.GetEquippedStatValue(this._pawn, stat);
+                    var statValue = _apparel.GetEquippedStatValue(_pawn, stat);
 
                     // statValue += StatCache.StatInfused(infusionSet, statPriority, ref equippedInfused);
-                    float statScore = 0f;
+                    var statScore = 0f;
                     if (ApparelStatCache.SpecialStats.Contains(stat))
                     {
-                        ApparelStatCache.CalculateScoreForSpecialStats(this._apparel, statPriority, this._pawn, statValue, ref statScore);
+                        ApparelStatCache.CalculateScoreForSpecialStats(_apparel, statPriority, _pawn, statValue,
+                            ref statScore);
                     }
                     else
                     {
@@ -194,7 +197,7 @@ namespace Outfitter
 
                     score += statScore;
 
-                    this.DrawLine(
+                    DrawLine(
                         statLabel,
                         labelWidth,
                         statValue.ToStringPercent("N1"),
@@ -202,20 +205,24 @@ namespace Outfitter
                         statScore.ToString("N2"));
                 }
 
-                if (infusedOffsets.Contains(stat))
+                if (!infusedOffsets.Contains(stat))
+                {
+                    continue;
+                }
+
                 {
                     GUI.color = Color.green; // new Color(0.5f, 1f, 1f, 1f);
 
                     // float statInfused = StatCache.StatInfused(infusionSet, statPriority, ref dontcare);
-                    ApparelStatCache.DoApparelScoreRaw_PawnStatsHandlers(this._apparel, stat, out float statValue);
+                    ApparelStatCache.DoApparelScoreRaw_PawnStatsHandlers(_apparel, stat, out var statValue);
 
-                    bool flag = true;
+                    var flag = true;
 
-                    float statScore = 0f;
+                    var statScore = 0f;
                     if (ApparelStatCache.SpecialStats.Contains(stat))
                     {
-                        ApparelStatCache.CalculateScoreForSpecialStats(this._apparel,
-                            statPriority, this._pawn,
+                        ApparelStatCache.CalculateScoreForSpecialStats(_apparel,
+                            statPriority, _pawn,
                             statValue,
                             ref statScore);
                     }
@@ -232,7 +239,7 @@ namespace Outfitter
                         statScore = statValue * statPriority.Weight;
                     }
 
-                    this.DrawLine(
+                    DrawLine(
                         statLabel,
                         labelWidth,
                         statValue.ToStringPercent("N1"),
@@ -260,18 +267,18 @@ namespace Outfitter
             // begin lower group
             FlexibleSpace();
             Space(6f);
-            Label(string.Empty, this._whiteLine, Height(1));
+            Label(string.Empty, _whiteLine, Height(1));
             Space(6f);
-            this.DrawLine(string.Empty, labelWidth, "Modifier", string.Empty, "Subtotal");
+            DrawLine(string.Empty, labelWidth, "Modifier", string.Empty, "Subtotal");
 
-            this.DrawLine("BasicStatusOfApparel".Translate(), labelWidth, "1.00", "+", score.ToString("N2"));
+            DrawLine("BasicStatusOfApparel".Translate(), labelWidth, "1.00", "+", score.ToString("N2"));
 
-            float special = this._apparel.GetSpecialApparelScoreOffset();
+            var special = _apparel.GetSpecialApparelScoreOffset();
             if (Math.Abs(special) > 0f)
             {
                 score += special;
 
-                this.DrawLine(
+                DrawLine(
                     "OutfitterSpecialScore".Translate(),
                     labelWidth,
                     special.ToString("N2"),
@@ -279,22 +286,22 @@ namespace Outfitter
                     score.ToString("N2"));
             }
 
-            float armor = ApparelStatCache.ApparelScoreRaw_ProtectionBaseStat(this._apparel);
+            var armor = ApparelStatCache.ApparelScoreRaw_ProtectionBaseStat(_apparel);
 
             if (Math.Abs(armor) > 0.01f)
             {
                 score += armor;
 
-                this.DrawLine("OutfitterArmor".Translate(), labelWidth, armor.ToString("N2"), "+", score.ToString("N2"));
+                DrawLine("OutfitterArmor".Translate(), labelWidth, armor.ToString("N2"), "+", score.ToString("N2"));
             }
 
-            if (this._apparel.def.useHitPoints)
+            if (_apparel.def.useHitPoints)
             {
                 // durability on 0-1 scale
-                float x = this._apparel.HitPoints / (float) this._apparel.MaxHitPoints;
+                var x = _apparel.HitPoints / (float) _apparel.MaxHitPoints;
                 score *= ApparelStatsHelper.HitPointsPercentScoreFactorCurve.Evaluate(x);
 
-                this.DrawLine(
+                DrawLine(
                     "OutfitterHitPoints".Translate(),
                     labelWidth,
                     x.ToString("N2"),
@@ -304,7 +311,7 @@ namespace Outfitter
                 GUI.color = Color.white;
             }
 
-            if (this._apparel.WornByCorpse && ThoughtUtility.CanGetThought(this._pawn, ThoughtDefOf.DeadMansApparel))
+            if (_apparel.WornByCorpse && ThoughtUtility.CanGetThought_NewTemp(_pawn, ThoughtDefOf.DeadMansApparel))
             {
                 score -= 0.5f;
                 if (score > 0f)
@@ -312,7 +319,7 @@ namespace Outfitter
                     score *= 0.1f;
                 }
 
-                this.DrawLine(
+                DrawLine(
                     "OutfitterWornByCorpse".Translate(),
                     labelWidth,
                     "modified",
@@ -320,9 +327,9 @@ namespace Outfitter
                     score.ToString("N2"));
             }
 
-            if (this._apparel.Stuff == ThingDefOf.Human.race.leatherDef)
+            if (_apparel.Stuff == ThingDefOf.Human.race.leatherDef)
             {
-                if (ThoughtUtility.CanGetThought(this._pawn, ThoughtDefOf.HumanLeatherApparelSad))
+                if (ThoughtUtility.CanGetThought_NewTemp(_pawn, ThoughtDefOf.HumanLeatherApparelSad))
                 {
                     score -= 0.5f;
                     if (score > 0f)
@@ -331,12 +338,12 @@ namespace Outfitter
                     }
                 }
 
-                if (ThoughtUtility.CanGetThought(this._pawn, ThoughtDefOf.HumanLeatherApparelHappy))
+                if (ThoughtUtility.CanGetThought_NewTemp(_pawn, ThoughtDefOf.HumanLeatherApparelHappy))
                 {
                     score *= 2f;
                 }
 
-                this.DrawLine(
+                DrawLine(
                     "OutfitterHumanLeather".Translate(),
                     labelWidth,
                     "modified",
@@ -344,13 +351,13 @@ namespace Outfitter
                     score.ToString("N2"));
             }
 
-            float temperature = conf.ApparelScoreRaw_Temperature(this._apparel);
+            var temperature = conf.ApparelScoreRaw_Temperature(_apparel);
 
             if (Math.Abs(temperature - 1f) > 0)
             {
                 score *= temperature;
 
-                this.DrawLine(
+                DrawLine(
                     "OutfitterTemperature".Translate(),
                     labelWidth,
                     temperature.ToString("N2"),
@@ -358,12 +365,12 @@ namespace Outfitter
                     score.ToString("N2"));
             }
 
-            this.DrawLine(
+            DrawLine(
                 "OutfitterTotal".Translate(),
                 labelWidth,
                 string.Empty,
                 "=",
-                conf.ApparelScoreRaw(this._apparel).ToString("N2"));
+                conf.ApparelScoreRaw(_apparel).ToString("N2"));
 
             GUI.color = Color.white;
             Text.Anchor = TextAnchor.UpperLeft;
@@ -375,18 +382,18 @@ namespace Outfitter
 
         public override void WindowUpdate()
         {
-            if (!this.IsVisible)
+            if (!IsVisible)
             {
-                this.Close(false);
+                Close(false);
             }
         }
 
         protected override void SetInitialSizeAndPosition()
         {
-            MainTabWindow_Inspect inspectWorker = (MainTabWindow_Inspect)MainButtonDefOf.Inspect.TabWindow;
-            this.windowRect = new Rect(
+            var inspectWorker = (MainTabWindow_Inspect) MainButtonDefOf.Inspect.TabWindow;
+            windowRect = new Rect(
                 770f,
-                inspectWorker.PaneTopY - 30f - this.InitialSize.y, this.InitialSize.x, this.InitialSize.y).Rounded();
+                inspectWorker.PaneTopY - 30f - InitialSize.y, InitialSize.x, InitialSize.y).Rounded();
         }
 
         private void DrawLine(
@@ -403,7 +410,7 @@ namespace Outfitter
             }
             else
             {
-                BeginHorizontal(this._hoverBox);
+                BeginHorizontal(_hoverBox);
             }
 
             Label(statDefLabelText, Width(statDefLabelWidth));
@@ -428,18 +435,17 @@ namespace Outfitter
 
         private string GetTitle()
         {
-            if (this._apparel != null)
+            if (_apparel != null)
             {
-                return this._apparel.LabelCap;
+                return _apparel.LabelCap;
             }
 
-            ThingDef thingDef = this.Def as ThingDef;
-            if (thingDef != null)
+            if (Def is ThingDef thingDef)
             {
-                return GenLabel.ThingLabel(thingDef, this._stuff).CapitalizeFirst();
+                return GenLabel.ThingLabel(thingDef, _stuff).CapitalizeFirst();
             }
 
-            return this.Def?.LabelCap;
+            return Def?.LabelCap;
         }
 
 #pragma warning disable 649

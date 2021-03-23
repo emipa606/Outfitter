@@ -7,32 +7,15 @@ namespace Outfitter
 {
     public class SaveablePawn : IExposable
     {
-        public List<Saveable_Pawn_StatDef> ApparelStats = new List<Saveable_Pawn_StatDef>();
+        private bool _addIndividualStats = true;
+        private bool _addPersonalStats = true;
 
-        public List<Apparel> ToWear = new List<Apparel>();
-
-        public List<Apparel> ToDrop = new List<Apparel>();
+        private bool _addWorkStats = true;
+        private List<Saveable_Pawn_StatDef> ApparelStats = new List<Saveable_Pawn_StatDef>();
 
         public bool ArmorOnly;
 
         public bool AutoEquipWeapon;
-
-        // public FloatRange RealComfyTemperatures;
-        private bool _forceStatUpdate;
-
-        public bool ForceStatUpdate
-        {
-            get
-            {
-                return this._forceStatUpdate;
-            }
-
-            set
-            {
-                this._forceStatUpdate = value;
-
-            }
-        }
 
         public MainJob MainJob;
 
@@ -47,36 +30,31 @@ namespace Outfitter
 
         public FloatRange Temperatureweight;
 
-        private bool _addIndividualStats = true;
-        private bool _addPersonalStats = true;
+        public List<Apparel> ToDrop = new List<Apparel>();
 
-        private bool _addWorkStats = true;
+        public List<Apparel> ToWear = new List<Apparel>();
+
+        // public FloatRange RealComfyTemperatures;
+
+        public bool ForceStatUpdate { get; set; }
 
         public bool AddIndividualStats
         {
-            get => this._addIndividualStats;
-            set
-            {
-                this._addIndividualStats = value;
-            }
+            get => _addIndividualStats;
+            set => _addIndividualStats = value;
         }
+
         public bool AddPersonalStats
         {
-            get => this._addPersonalStats;
-            set
-            {
-                this._addPersonalStats = value;
-            }
+            get => _addPersonalStats;
+            set => _addPersonalStats = value;
         }
 
         public bool AddWorkStats
         {
-            get => this._addWorkStats;
+            get => _addWorkStats;
 
-            set
-            {
-                this._addWorkStats = value;
-            }
+            set => _addWorkStats = value;
         }
 
         // public SaveablePawn(Pawn pawn)
@@ -88,19 +66,19 @@ namespace Outfitter
         // }
         public void ExposeData()
         {
-            Scribe_References.Look(ref this.Pawn, "Pawn");
-            Scribe_Values.Look(ref this.TargetTemperaturesOverride, "targetTemperaturesOverride");
-            Scribe_Values.Look(ref this.TargetTemperatures, "TargetTemperatures");
+            Scribe_References.Look(ref Pawn, "Pawn");
+            Scribe_Values.Look(ref TargetTemperaturesOverride, "targetTemperaturesOverride");
+            Scribe_Values.Look(ref TargetTemperatures, "TargetTemperatures");
 
             // bug: stats are not saved
-            Scribe_Collections.Look(ref this.Stats, "Stats", LookMode.Deep);
+            Scribe_Collections.Look(ref Stats, "Stats", LookMode.Deep);
 
             // todo: rename with next big version
-            Scribe_Collections.Look(ref this.ApparelStats, "WeaponStats", LookMode.Deep);
-            Scribe_Values.Look(ref this._addWorkStats, "AddWorkStats", true);
-            Scribe_Values.Look(ref this._addIndividualStats, "AddIndividualStats", true);
-            Scribe_Values.Look(ref this._addPersonalStats, "addPersonalStats", true);
-            Scribe_Values.Look(ref this.MainJob, "mainJob");
+            Scribe_Collections.Look(ref ApparelStats, "WeaponStats", LookMode.Deep);
+            Scribe_Values.Look(ref _addWorkStats, "AddWorkStats", true);
+            Scribe_Values.Look(ref _addIndividualStats, "AddIndividualStats", true);
+            Scribe_Values.Look(ref _addPersonalStats, "addPersonalStats", true);
+            Scribe_Values.Look(ref MainJob, "mainJob");
         }
     }
 }

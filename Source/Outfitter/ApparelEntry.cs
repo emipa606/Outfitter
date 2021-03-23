@@ -13,9 +13,9 @@ namespace Outfitter
 
         public ApparelEntry()
         {
-            this.EquippedOffsets = new HashSet<StatDef>();
-            this.InfusedOffsets  = new HashSet<StatDef>();
-            this.StatBases       = new HashSet<StatDef>();
+            EquippedOffsets = new HashSet<StatDef>();
+            InfusedOffsets = new HashSet<StatDef>();
+            StatBases = new HashSet<StatDef>();
         }
     }
 }

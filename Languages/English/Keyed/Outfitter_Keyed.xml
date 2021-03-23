@@ -39,5 +39,4 @@
   <Settings.UseEyesTooltip>Enabling this removes the FullHead body part group from both eyes and the jaw. Use at your own risk.</Settings.UseEyesTooltip>
   <Settings.UseTailorWorkbenchUI>Use custom categorized bills for apparel on workbenches</Settings.UseTailorWorkbenchUI>
   <Settings.UseTailorWorkbenchUITooltip>Enabling this will turn on experimental categorization of appareil bills, using a prefilter by covered body parts</Settings.UseTailorWorkbenchUITooltip>
-
 </LanguageData>

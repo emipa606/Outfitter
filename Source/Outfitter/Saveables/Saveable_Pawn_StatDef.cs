@@ -14,20 +14,20 @@ namespace Outfitter
 
         public StatAssignment Assignment
         {
-            get => this._assignment;
-            set => this._assignment = value;
+            get => _assignment;
+            set => _assignment = value;
         }
 
         public StatDef Stat
         {
-            get => this._stat;
-            set => this._stat = value;
+            get => _stat;
+            set => _stat = value;
         }
 
         public float Weight
         {
-            get => this._weight;
-            set => this._weight = value;
+            get => _weight;
+            set => _weight = value;
         }
 
         /*
@@ -47,9 +47,9 @@ Assignment = assignment;
 */
         public void ExposeData()
         {
-            Scribe_Defs.Look(ref this._stat, "Stat");
-            Scribe_Values.Look(ref this._assignment, "Assignment");
-            Scribe_Values.Look(ref this._weight, "Weight");
+            Scribe_Defs.Look(ref _stat, "Stat");
+            Scribe_Values.Look(ref _assignment, "Assignment");
+            Scribe_Values.Look(ref _weight, "Weight");
         }
     }
 }
