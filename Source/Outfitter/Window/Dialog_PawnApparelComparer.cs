@@ -79,8 +79,6 @@ namespace Outfitter.Window
 
 
             var apparelLabelWidth = ((groupRect.width - (2 * ScoreWidth)) / 3) - 8f - 8f;
-            var apparelEquippedWidth = apparelLabelWidth;
-            var apparelOwnerWidth = apparelLabelWidth;
 
             var itemRect = new Rect(groupRect.xMin + 4f, groupRect.yMin, groupRect.width - 8f, 28f);
 
@@ -91,10 +89,10 @@ namespace Outfitter.Window
                 apparelLabelWidth,
                 null,
                 "Equiped",
-                apparelEquippedWidth,
+                apparelLabelWidth,
                 null,
                 "Target",
-                apparelOwnerWidth,
+                apparelLabelWidth,
                 "Score",
                 "Gain");
 
@@ -143,10 +141,10 @@ namespace Outfitter.Window
                     apparelLabelWidth,
                     equipped,
                     equipped?.LabelCap,
-                    apparelEquippedWidth,
+                    apparelLabelWidth,
                     null,
                     null,
-                    apparelOwnerWidth,
+                    apparelLabelWidth,
                     apparelStatCache.ApparelScoreRaw(currentAppel).ToString("N3"),
                     gainString
                 );

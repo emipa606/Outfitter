@@ -18,7 +18,7 @@ namespace Outfitter
 {
     public static class ApparelStatsHelper
     {
-        #region Public Fields
+        private const float ScoreFactorIfNotReplacing = 10f;
 
         // New curve
         public static readonly SimpleCurve HitPointsPercentScoreFactorCurve = new SimpleCurve
@@ -48,15 +48,55 @@ namespace Outfitter
             // new CurvePoint( 1f, 1f )
         };
 
-        #endregion Public Fields
+        [NotNull] private static readonly List<string> IgnoredWorktypeDefs =
+            new List<string>
+            {
+                "Firefighter",
+                "Patient",
+                "PatientBedRest",
+                "Flicker",
+                "BasicWorker",
+                "HaulingUrgent",
+                "FinishingOff",
+                "Feeding",
+                "FSFRearming",
+                "Rearming", // Splitter
+                "FSFRefueling",
+                "Refueling", // Splitter
+                "FSFLoading",
+                "Loading", // Splitter
+                "FSFCremating",
+                "FSFDeconstruct",
+                "Demolition", // Splitter
+                "Nursing", // Splitter
+                "Mortician", // Splitter
+                "Preparing", // Splitter
+                "Therapist"
+            };
 
-        #region Public Properties
+        private static readonly Dictionary<Pawn, ApparelStatCache> PawnApparelStatCaches =
+            new Dictionary<Pawn, ApparelStatCache>();
+
+        private static List<StatDef> _allApparelStats;
+
+        private static readonly List<StatDef> _ignoredStatsList = new List<StatDef>
+        {
+            StatDefOf.ComfyTemperatureMin,
+            StatDefOf.ComfyTemperatureMax,
+            StatDefOf.MarketValue,
+            StatDefOf.MaxHitPoints,
+            StatDefOf.SellPriceFactor,
+            StatDefOf.Beauty,
+            StatDefOf.DeteriorationRate,
+            StatDefOf.Flammability,
+            StatDefOf.Insulation_Cold,
+            StatDefOf.Insulation_Heat,
+            StatDefOf.Mass,
+            StatDefOf.WorkToMake,
+            StatDefOf.MedicalPotency
+        };
 
         public static FloatRange MinMaxTemperatureRange => new FloatRange(-100, 100);
-
-        #endregion Public Properties
-
-        #region Private Properties
 
         private static List<StatDef> AllStatDefsModifiedByAnyApparel
         {
@@ -100,63 +140,6 @@ namespace Outfitter
                 return _allApparelStats;
             }
         }
-
-        #endregion Private Properties
-
-        #region Private Fields
-
-        private const float ScoreFactorIfNotReplacing = 10f;
-
-        [NotNull] private static readonly List<string> IgnoredWorktypeDefs =
-            new List<string>
-            {
-                "Firefighter",
-                "Patient",
-                "PatientBedRest",
-                "Flicker",
-                "HaulingUrgent",
-                "FinishingOff",
-                "Feeding",
-                "FSFRearming",
-                "Rearming", // Splitter
-                "FSFRefueling",
-                "Refueling", // Splitter
-                "FSFLoading",
-                "Loading", // Splitter
-                "FSFCremating",
-                "FSFDeconstruct",
-                "Demolition", // Splitter
-                "Nursing", // Splitter
-                "Mortician", // Splitter
-                "Preparing", // Splitter
-                "Therapist"
-            };
-
-        private static readonly Dictionary<Pawn, ApparelStatCache> PawnApparelStatCaches =
-            new Dictionary<Pawn, ApparelStatCache>();
-
-        private static List<StatDef> _allApparelStats;
-
-        private static readonly List<StatDef> _ignoredStatsList = new List<StatDef>
-        {
-            StatDefOf.ComfyTemperatureMin,
-            StatDefOf.ComfyTemperatureMax,
-            StatDefOf.MarketValue,
-            StatDefOf.MaxHitPoints,
-            StatDefOf.SellPriceFactor,
-            StatDefOf.Beauty,
-            StatDefOf.DeteriorationRate,
-            StatDefOf.Flammability,
-            StatDefOf.Insulation_Cold,
-            StatDefOf.Insulation_Heat,
-            StatDefOf.Mass,
-            StatDefOf.WorkToMake,
-            StatDefOf.MedicalPotency
-        };
-
-        #endregion Private Fields
-
-        #region Public Methods
 
         // ReSharper disable once UnusedMember.Global
         public static float ApparelScoreGain([NotNull] this Pawn pawn, [NotNull] Apparel newAp,
@@ -538,10 +521,6 @@ namespace Outfitter
             return AllStatDefsModifiedByAnyApparel
                 .Except(pawn.GetApparelStatCache().StatCache.Select(prio => prio.Stat)).ToList();
         }
-
-        #endregion Public Methods
-
-        #region Private Methods
 
         private static void AddStatToDict(
             [NotNull] StatDef stat,
@@ -1152,7 +1131,5 @@ namespace Outfitter
         {
             return mainJob ? 3f : 1f;
         }
-
-        #endregion Private Methods
     }
 }

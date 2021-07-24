@@ -102,10 +102,9 @@ namespace Outfitter
 
                 // loop over each (new) stat
                 // Armor only used by the Battle beacon, no relevance to jobs etc.
-                var thisPawn = _pawn;
                 if (_pawnSave.ArmorOnly)
                 {
-                    var updateArmorStats = thisPawn.GetWeightedApparelArmorStats();
+                    var updateArmorStats = _pawn.GetWeightedApparelArmorStats();
                     foreach (var pair in updateArmorStats)
                     {
                         // find index of existing priority for this stat
@@ -126,9 +125,9 @@ namespace Outfitter
                 }
                 else
                 {
-                    var updateAutoPriorities = thisPawn.GetWeightedApparelStats();
+                    var updateAutoPriorities = _pawn.GetWeightedApparelStats();
                     var updateIndividualPriorities =
-                        thisPawn.GetWeightedApparelIndividualStats();
+                        _pawn.GetWeightedApparelIndividualStats();
 
                     // updateAutoPriorities = updateAutoPriorities.OrderBy(x => x.Key.label).ToDictionary(x => x.Key, x => x.Value);
                     updateAutoPriorities = updateAutoPriorities.OrderByDescending(x => Mathf.Abs(x.Value))
@@ -271,9 +270,8 @@ namespace Outfitter
             }
 
             // only allow shields to be considered if a primary weapon is equipped and is melee
-            var thisPawn = _pawn;
 
-            if (ap.def.thingClass == typeof(ShieldBelt) && thisPawn.equipment.Primary?.def.IsRangedWeapon == true)
+            if (ap.def.thingClass == typeof(ShieldBelt) && _pawn.equipment.Primary?.def.IsRangedWeapon == true)
             {
                 return -1f;
             }
@@ -303,7 +301,7 @@ namespace Outfitter
             float score = 1;
 
             // add values for each statdef modified by the apparel
-            var stats = thisPawn.GetApparelStatCache().StatCache;
+            var stats = _pawn.GetApparelStatCache().StatCache;
 
             foreach (var statPriority in stats.Where(statPriority => statPriority != null))
             {
@@ -315,7 +313,7 @@ namespace Outfitter
 
                     if (SpecialStats.Contains(stat))
                     {
-                        CalculateScoreForSpecialStats(ap, statPriority, thisPawn, apStat, ref score);
+                        CalculateScoreForSpecialStats(ap, statPriority, _pawn, apStat, ref score);
                     }
                     else
                     {
@@ -332,7 +330,7 @@ namespace Outfitter
 
                     if (SpecialStats.Contains(stat))
                     {
-                        CalculateScoreForSpecialStats(ap, statPriority, thisPawn, apStat, ref score);
+                        CalculateScoreForSpecialStats(ap, statPriority, _pawn, apStat, ref score);
                     }
                     else
                     {
@@ -356,7 +354,7 @@ namespace Outfitter
 
                 if (SpecialStats.Contains(stat))
                 {
-                    CalculateScoreForSpecialStats(ap, statPriority, thisPawn, statInfused, ref score);
+                    CalculateScoreForSpecialStats(ap, statPriority, _pawn, statInfused, ref score);
                 }
                 else
                 {
@@ -383,7 +381,7 @@ namespace Outfitter
                 score *= ApparelStatsHelper.HitPointsPercentScoreFactorCurve.Evaluate(x);
             }
 
-            if (ap.WornByCorpse && ThoughtUtility.CanGetThought_NewTemp(thisPawn, ThoughtDefOf.DeadMansApparel))
+            if (ap.WornByCorpse && ThoughtUtility.CanGetThought(_pawn, ThoughtDefOf.DeadMansApparel))
             {
                 score -= 0.5f;
                 if (score > 0f)
@@ -394,7 +392,7 @@ namespace Outfitter
 
             if (ap.Stuff == ThingDefOf.Human.race.leatherDef)
             {
-                if (ThoughtUtility.CanGetThought_NewTemp(thisPawn, ThoughtDefOf.HumanLeatherApparelSad))
+                if (ThoughtUtility.CanGetThought(_pawn, ThoughtDefOf.HumanLeatherApparelSad))
                 {
                     score -= 0.5f;
                     if (score > 0f)
@@ -403,7 +401,7 @@ namespace Outfitter
                     }
                 }
 
-                if (ThoughtUtility.CanGetThought_NewTemp(thisPawn, ThoughtDefOf.HumanLeatherApparelHappy))
+                if (ThoughtUtility.CanGetThought(_pawn, ThoughtDefOf.HumanLeatherApparelHappy))
                 {
                     score *= 2f;
                 }
@@ -469,9 +467,8 @@ namespace Outfitter
         {
             // float minComfyTemperature = pawnSave.RealComfyTemperatures.min;
             // float maxComfyTemperature = pawnSave.RealComfyTemperatures.max;
-            var thisPawn = _pawn;
-            var minComfyTemperature = thisPawn.ComfortableTemperatureRange().min;
-            var maxComfyTemperature = thisPawn.ComfortableTemperatureRange().max;
+            var minComfyTemperature = _pawn.ComfortableTemperatureRange().min;
+            var maxComfyTemperature = _pawn.ComfortableTemperatureRange().max;
 
             // temperature
             var targetTemperatures = TargetTemperatures;
@@ -483,7 +480,7 @@ namespace Outfitter
                       + maxComfyTemperature;
 
             // if this gear is currently worn, we need to make sure the contribution to the pawn's comfy temps is removed so the gear is properly scored
-            var wornApparel = thisPawn.apparel.WornApparel;
+            var wornApparel = _pawn.apparel.WornApparel;
             if (!wornApparel.NullOrEmpty())
             {
                 if (wornApparel.Contains(apparel))
@@ -497,7 +494,7 @@ namespace Outfitter
                     // check if the candidate will replace existing gear
                     foreach (var wornAp in wornApparel)
                     {
-                        if (ApparelUtility.CanWearTogether(wornAp.def, apparel.def, thisPawn.RaceProps.body))
+                        if (ApparelUtility.CanWearTogether(wornAp.def, apparel.def, _pawn.RaceProps.body))
                         {
                             continue;
                         }
@@ -641,8 +638,6 @@ namespace Outfitter
 
         public void UpdateTemperatureIfNecessary(bool force = false, bool forceweight = false)
         {
-            var thisPawn = _pawn;
-
             if (Find.TickManager.TicksGame - _lastTempUpdate > JobGiver_OutfitterOptimizeApparel.ApparelStatCheck
                 || force)
             {
@@ -650,15 +645,15 @@ namespace Outfitter
                 if (!_pawnSave.TargetTemperaturesOverride)
                 {
                     // float temp = GenTemperature.GetTemperatureAtTile(thisPawn.Map.Tile);
-                    var lowest = LowestTemperatureComing(thisPawn.Map);
-                    var highest = HighestTemperatureComing(thisPawn.Map);
+                    var lowest = LowestTemperatureComing(_pawn.Map);
+                    var highest = HighestTemperatureComing(_pawn.Map);
 
                     // float minTemp = Mathf.Min(lowest - 5f, temp - 15f);
                     _pawnSave.TargetTemperatures =
                         new FloatRange(Mathf.Min(12, lowest - 10f), Mathf.Max(32, highest + 10f));
 
                     var cooking = DefDatabase<WorkTypeDef>.GetNamed("Cooking");
-                    if (thisPawn.workSettings.WorkIsActive(cooking) && thisPawn.workSettings.GetPriority(cooking) < 3)
+                    if (_pawn.workSettings.WorkIsActive(cooking) && _pawn.workSettings.GetPriority(cooking) < 3)
                     {
                         _pawnSave.TargetTemperatures.min = Mathf.Min(_pawnSave.TargetTemperatures.min, -3);
                     }
@@ -668,9 +663,9 @@ namespace Outfitter
             }
 
             // FloatRange RealComfyTemperatures = thisPawn.ComfortableTemperatureRange();
-            var min = thisPawn.def.statBases.GetStatValueFromList(StatDefOf.ComfyTemperatureMin,
+            var min = _pawn.def.statBases.GetStatValueFromList(StatDefOf.ComfyTemperatureMin,
                 StatDefOf.ComfyTemperatureMin.defaultBaseValue);
-            var max = thisPawn.def.statBases.GetStatValueFromList(StatDefOf.ComfyTemperatureMax,
+            var max = _pawn.def.statBases.GetStatValueFromList(StatDefOf.ComfyTemperatureMax,
                 StatDefOf.ComfyTemperatureMax.defaultBaseValue);
 
             if (Find.TickManager.TicksGame - _lastWeightUpdate <= JobGiver_OutfitterOptimizeApparel.ApparelStatCheck &&

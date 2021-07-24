@@ -254,7 +254,7 @@ namespace Outfitter.TabPatch
                     }
 
                     var floatMenuOption = new FloatMenuOption(recipe.LabelCap, Action, MenuOptionPriority.Default,
-                        MouseoverGuiAction, null, 29f,
+                        delegate { MouseoverGuiAction(); }, null, 29f,
                         rect => Widgets.InfoCardButton((float) (rect.x + 5.0),
                             (float) (rect.y + ((rect.height - 24.0) / 2.0)), recipe));
 

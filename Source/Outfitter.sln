@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Outfitter", "Outfitter\Outfitter.csproj", "{674578FF-B7C7-4142-A8E3-CBB52BD8B996}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Outfitter", "Outfitter\Outfitter.csproj", "{674578FF-B7C7-4142-A8E3-CBB52BD8B996}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "0KillfaceTools", "0KillfaceTools\0KillfaceTools.csproj", "{600592CE-D8EC-4170-8C4B-4D33DE54F99E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +20,12 @@ Global
 		{674578FF-B7C7-4142-A8E3-CBB52BD8B996}.NoCCL|Any CPU.Build.0 = NoCCL|Any CPU
 		{674578FF-B7C7-4142-A8E3-CBB52BD8B996}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{674578FF-B7C7-4142-A8E3-CBB52BD8B996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{600592CE-D8EC-4170-8C4B-4D33DE54F99E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{600592CE-D8EC-4170-8C4B-4D33DE54F99E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{600592CE-D8EC-4170-8C4B-4D33DE54F99E}.NoCCL|Any CPU.ActiveCfg = Debug|Any CPU
+		{600592CE-D8EC-4170-8C4B-4D33DE54F99E}.NoCCL|Any CPU.Build.0 = Debug|Any CPU
+		{600592CE-D8EC-4170-8C4B-4D33DE54F99E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{600592CE-D8EC-4170-8C4B-4D33DE54F99E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

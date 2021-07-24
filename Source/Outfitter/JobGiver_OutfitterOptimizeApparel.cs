@@ -10,27 +10,17 @@ namespace Outfitter
 {
     public static class JobGiver_OutfitterOptimizeApparel
     {
-        #region Public Fields
-
         public const int ApparelStatCheck = 3750;
 
         // private const int ApparelOptimizeCheckIntervalMin = 9000;
         // private const int ApparelOptimizeCheckIntervalMax = 12000;
         private const float MinScoreGainToCare = 0.09f;
 
-        #endregion Public Fields
-
-        #region Private Fields
-
         private const int ApparelOptimizeCheckIntervalMax = 9000;
         private const int ApparelOptimizeCheckIntervalMin = 6000;
 
         // private const float MinScoreGainToCare = 0.15f;
         private static StringBuilder _debugSb;
-
-        #endregion Private Fields
-
-        #region Public Methods
 
         // private static Apparel lastItem;
         private static void SetNextOptimizeTick([NotNull] Pawn pawn)
@@ -47,7 +37,7 @@ namespace Outfitter
 
         private static bool CanWearApparel(Pawn pawn, Apparel apparel)
         {
-            if (EquipmentUtility.IsBiocoded(apparel) && !EquipmentUtility.IsBiocodedFor(apparel, pawn))
+            if (!EquipmentUtility.IsBondedTo(apparel, pawn))
             {
                 return false;
             }
@@ -277,7 +267,5 @@ namespace Outfitter
             pawn.Reserve(thing, __result, 1, 1);
             return false;
         }
-
-        #endregion Public Methods
     }
 }

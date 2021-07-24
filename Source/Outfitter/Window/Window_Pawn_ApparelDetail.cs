@@ -216,7 +216,7 @@ namespace Outfitter
                     // float statInfused = StatCache.StatInfused(infusionSet, statPriority, ref dontcare);
                     ApparelStatCache.DoApparelScoreRaw_PawnStatsHandlers(_apparel, stat, out var statValue);
 
-                    var flag = true;
+                    var badArmor = true;
 
                     var statScore = 0f;
                     if (ApparelStatCache.SpecialStats.Contains(stat))
@@ -233,7 +233,7 @@ namespace Outfitter
                             && (stat == StatDefOf.ArmorRating_Blunt || stat == StatDefOf.ArmorRating_Sharp))
                         {
                             score = -2f;
-                            flag = false;
+                            badArmor = false;
                         }
 
                         statScore = statValue * statPriority.Weight;
@@ -248,7 +248,7 @@ namespace Outfitter
 
                     GUI.color = Color.white;
 
-                    if (flag)
+                    if (badArmor)
                     {
                         score += statScore;
                     }
@@ -311,7 +311,7 @@ namespace Outfitter
                 GUI.color = Color.white;
             }
 
-            if (_apparel.WornByCorpse && ThoughtUtility.CanGetThought_NewTemp(_pawn, ThoughtDefOf.DeadMansApparel))
+            if (_apparel.WornByCorpse && ThoughtUtility.CanGetThought(_pawn, ThoughtDefOf.DeadMansApparel))
             {
                 score -= 0.5f;
                 if (score > 0f)
@@ -329,7 +329,7 @@ namespace Outfitter
 
             if (_apparel.Stuff == ThingDefOf.Human.race.leatherDef)
             {
-                if (ThoughtUtility.CanGetThought_NewTemp(_pawn, ThoughtDefOf.HumanLeatherApparelSad))
+                if (ThoughtUtility.CanGetThought(_pawn, ThoughtDefOf.HumanLeatherApparelSad))
                 {
                     score -= 0.5f;
                     if (score > 0f)
@@ -338,7 +338,7 @@ namespace Outfitter
                     }
                 }
 
-                if (ThoughtUtility.CanGetThought_NewTemp(_pawn, ThoughtDefOf.HumanLeatherApparelHappy))
+                if (ThoughtUtility.CanGetThought(_pawn, ThoughtDefOf.HumanLeatherApparelHappy))
                 {
                     score *= 2f;
                 }

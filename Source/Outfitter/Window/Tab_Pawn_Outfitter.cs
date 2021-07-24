@@ -15,17 +15,26 @@ namespace Outfitter
 {
     public class Tab_Pawn_Outfitter : ITab
     {
-        #region Public Constructors
+        private const float ButtonHeight = 30f;
+        private const float Margin = 10f;
+        private const float ThingIconSize = 30f;
+        private const float ThingLeftX = 40f;
+        private const float ThingRowHeight = 64f;
+
+        private static readonly Color HighlightColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+        private static readonly Color ThingLabelColor = new Color(0.9f, 0.9f, 0.9f, 1f);
+
+        private Vector2 _scrollPosition = Vector2.zero;
+        private Vector2 _scrollPosition1 = Vector2.zero;
+
+        private float _scrollViewHeight;
+        private float _scrollViewHeight1;
 
         public Tab_Pawn_Outfitter()
         {
             size = new Vector2(770f, 550f);
             labelKey = "OutfitterTab";
         }
-
-        #endregion Public Constructors
-
-        #region Public Properties
 
         public override bool IsVisible
         {
@@ -58,9 +67,25 @@ namespace Outfitter
             }
         }
 
-        #endregion Public Properties
+        private bool CanControl => SelPawn.IsColonistPlayerControlled;
 
-        #region Protected Methods
+        private Pawn SelPawnForGear
+        {
+            get
+            {
+                if (SelPawn != null)
+                {
+                    return SelPawn;
+                }
+
+                if (SelThing is Corpse corpse)
+                {
+                    return corpse.InnerPawn;
+                }
+
+                throw new InvalidOperationException("Gear tab on non-pawn non-corpse " + SelThing);
+            }
+        }
 
         protected override void FillTab()
         {
@@ -177,53 +202,6 @@ namespace Outfitter
             GUI.color = Color.white;
             Text.Anchor = TextAnchor.UpperLeft;
         }
-
-        #endregion Protected Methods
-
-        #region Private Fields
-
-        private const float ButtonHeight = 30f;
-        private const float Margin = 10f;
-        private const float ThingIconSize = 30f;
-        private const float ThingLeftX = 40f;
-        private const float ThingRowHeight = 64f;
-
-        private static readonly Color HighlightColor = new Color(0.5f, 0.5f, 0.5f, 1f);
-        private static readonly Color ThingLabelColor = new Color(0.9f, 0.9f, 0.9f, 1f);
-
-        private Vector2 _scrollPosition = Vector2.zero;
-        private Vector2 _scrollPosition1 = Vector2.zero;
-
-        private float _scrollViewHeight;
-        private float _scrollViewHeight1;
-
-        #endregion Private Fields
-
-        #region Private Properties
-
-        private bool CanControl => SelPawn.IsColonistPlayerControlled;
-
-        private Pawn SelPawnForGear
-        {
-            get
-            {
-                if (SelPawn != null)
-                {
-                    return SelPawn;
-                }
-
-                if (SelThing is Corpse corpse)
-                {
-                    return corpse.InnerPawn;
-                }
-
-                throw new InvalidOperationException("Gear tab on non-pawn non-corpse " + SelThing);
-            }
-        }
-
-        #endregion Private Properties
-
-        #region Private Methods
 
         private void DrawApparelList()
         {
@@ -837,7 +815,5 @@ namespace Outfitter
                     statValue2.ToStringTemperature("F0")));
             curY += 22f;
         }
-
-        #endregion Private Methods
     }
 }
