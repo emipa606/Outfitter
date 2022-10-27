@@ -1,25 +1,16 @@
 # Outfitter
 
-![Image](https://i.imgur.com/WAEzk68.png)
+![Image](https://i.imgur.com/buuPQel.png)
 
 Update of Aras mod
 https://steamcommunity.com/sharedfiles/filedetails/?id=1525516966
 
 - Fixed the Cold Isolation bug
 
-![Image](https://i.imgur.com/7Gzt3Rg.png)
+![Image](https://i.imgur.com/pufA0kM.png)
 
-
-[table]
-	[tr]
-		[td]https://invite.gg/Mlie]![Image](https://i.imgur.com/zdzzBrc.png)
-[/td]
-		[td]https://github.com/emipa606/Outfitter]![Image](https://i.imgur.com/kTkpTOE.png)
-[/td]
-	[/tr]
-[/table]
 	
-![Image](https://i.imgur.com/NOW7jU1.png)
+![Image](https://i.imgur.com/Z4GOv8H.png)
 
 
 Allows pawns to factor in all kinds of gear stat offsets other than just armor.
@@ -28,20 +19,20 @@ Allows pawns to factor in all kinds of gear stat offsets other than just armor.
     - Takes personal traits like temperature preference or mental states into account.
     - No naked pawns!
 
-    Original version of &apos;Outfitter™&apos; by Fluffy. Original version of &apos;AutoEquip™&apos; by soulkata.
+    Original version of 'Outfitter™' by Fluffy. Original version of 'AutoEquip™' by soulkata.
     This is a fusion of both mods.
     B18, A17, A16 and A15 versions by Killface.
     Updated to B19 by Araelle.
 	
     DISCLAIMER: I am not a C# expert! in fact i just picked it up to update this mod.
-    It is provided AS IS. I will try my best to support it, but don&apos;t expect miracles.
+    It is provided AS IS. I will try my best to support it, but don't expect miracles.
 	
     Please report bugs, compatibility issues and so on.
 
-    Also supports Fluffy&apos;s ModManager
+    Also supports Fluffy's ModManager
 
 
-![Image](https://i.imgur.com/Rs6T6cr.png)
+![Image](https://i.imgur.com/PwoNOj4.png)
 
 
 

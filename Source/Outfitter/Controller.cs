@@ -1,90 +1,92 @@
-﻿using System.Linq;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
+using Mlie;
 using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace Outfitter
+namespace Outfitter;
+
+internal class Controller : Mod
 {
-    internal class Controller : Mod
+    public static Settings Settings;
+    public static string currentVersion;
+
+    public Controller(ModContentPack content)
+        : base(content)
     {
-        public static Settings Settings;
+        Settings = GetSettings<Settings>();
+        currentVersion =
+            VersionFromManifest.GetVersionFromModMetaData(ModLister.GetActiveModWithIdentifier("Mlie.Outfitter"));
+    }
 
-        public Controller(ModContentPack content)
-            : base(content)
+    public override void DoSettingsWindowContents(Rect inRect)
+    {
+        Settings.DoWindowContents(inRect);
+    }
+
+    [NotNull]
+    public override string SettingsCategory()
+    {
+        return "Outfitter";
+    }
+
+    public override void WriteSettings()
+    {
+        base.WriteSettings();
+        Settings.Write();
+
+        if (Current.ProgramState != ProgramState.Playing)
         {
-            Settings = GetSettings<Settings>();
+            return;
         }
 
-        public override void DoSettingsWindowContents(Rect inRect)
+        foreach (var bodyDef in DefDatabase<BodyDef>.AllDefsListForReading)
         {
-            Settings.DoWindowContents(inRect);
-        }
-
-        [NotNull]
-        public override string SettingsCategory()
-        {
-            return "Outfitter";
-        }
-
-        public override void WriteSettings()
-        {
-            base.WriteSettings();
-            Settings.Write();
-
-            if (Current.ProgramState != ProgramState.Playing)
+            if (bodyDef.defName != "Human")
             {
-                return;
+                continue;
             }
 
-            foreach (var bodyDef in DefDatabase<BodyDef>.AllDefsListForReading)
+            var neck = bodyDef.corePart.parts.FirstOrDefault(x => x.def == BodyPartDefOf.Neck);
+            var head = neck?.parts.FirstOrDefault(x => x.def == BodyPartDefOf.Head);
+            if (head == null)
             {
-                if (bodyDef.defName != "Human")
+                continue;
+            }
+
+            //    if (!head.groups.Contains(BodyPartGroupDefOf.Eyes))
+            {
+                //     head.groups.Add(BodyPartGroupDefOf.Eyes);
+                //BodyPartRecord leftEye = head.parts.FirstOrDefault(x => x.def == BodyPartDefOf.LeftEye);
+                //BodyPartRecord rightEye = head.parts.FirstOrDefault(x => x.def == BodyPartDefOf.RightEye);
+                var jaw = head.parts.FirstOrDefault(x => x.def == BodyPartDefOf.Jaw);
+
+                if (Settings.UseEyes)
                 {
-                    continue;
+                    //leftEye?.groups.Remove(BodyPartGroupDefOf.FullHead);
+                    //rightEye?.groups.Remove(BodyPartGroupDefOf.FullHead);
+                    jaw?.groups.Remove(BodyPartGroupDefOf.FullHead);
+                    //Log.Message("Outfitter removed FullHead from Human eyes.");
                 }
-
-                var neck = bodyDef.corePart.parts.FirstOrDefault(x => x.def == BodyPartDefOf.Neck);
-                var head = neck?.parts.FirstOrDefault(x => x.def == BodyPartDefOf.Head);
-                if (head == null)
+                else
                 {
-                    continue;
-                }
-
-                //    if (!head.groups.Contains(BodyPartGroupDefOf.Eyes))
-                {
-                    //     head.groups.Add(BodyPartGroupDefOf.Eyes);
-                    //BodyPartRecord leftEye = head.parts.FirstOrDefault(x => x.def == BodyPartDefOf.LeftEye);
-                    //BodyPartRecord rightEye = head.parts.FirstOrDefault(x => x.def == BodyPartDefOf.RightEye);
-                    var jaw = head.parts.FirstOrDefault(x => x.def == BodyPartDefOf.Jaw);
-
-                    if (Settings.UseEyes)
-                    {
-                        //leftEye?.groups.Remove(BodyPartGroupDefOf.FullHead);
-                        //rightEye?.groups.Remove(BodyPartGroupDefOf.FullHead);
-                        jaw?.groups.Remove(BodyPartGroupDefOf.FullHead);
-                        //Log.Message("Outfitter removed FullHead from Human eyes.");
-                    }
-                    else
-                    {
-                        /*if (leftEye != null && !leftEye.groups.Contains(BodyPartGroupDefOf.FullHead))
-                            {
-                                leftEye?.groups.Add(BodyPartGroupDefOf.FullHead);
-                            }
-                            if (rightEye != null && !rightEye.groups.Contains(BodyPartGroupDefOf.FullHead))
-                            {
-                                rightEye?.groups.Add(BodyPartGroupDefOf.FullHead);
-                            }*/
-                        if (jaw != null && !jaw.groups.Contains(BodyPartGroupDefOf.FullHead))
+                    /*if (leftEye != null && !leftEye.groups.Contains(BodyPartGroupDefOf.FullHead))
                         {
-                            jaw.groups.Add(BodyPartGroupDefOf.FullHead);
+                            leftEye?.groups.Add(BodyPartGroupDefOf.FullHead);
                         }
-
-                        //Log.Message("Outfitter re-added FullHead to Human eyes.");
+                        if (rightEye != null && !rightEye.groups.Contains(BodyPartGroupDefOf.FullHead))
+                        {
+                            rightEye?.groups.Add(BodyPartGroupDefOf.FullHead);
+                        }*/
+                    if (jaw != null && !jaw.groups.Contains(BodyPartGroupDefOf.FullHead))
+                    {
+                        jaw.groups.Add(BodyPartGroupDefOf.FullHead);
                     }
 
-                    break;
+                    //Log.Message("Outfitter re-added FullHead to Human eyes.");
                 }
+
+                break;
             }
         }
     }

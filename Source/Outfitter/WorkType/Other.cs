@@ -1,9 +1,8 @@
-﻿namespace Outfitter.WorkType
-{
-    public static class Other
-    {
-        public const string FluffyManaging = "Managing";
+﻿namespace Outfitter.WorkType;
 
-        public const string HospitalityDiplomat = "Diplomat";
-    }
+public static class Other
+{
+    public const string FluffyManaging = "Managing";
+
+    public const string HospitalityDiplomat = "Diplomat";
 }

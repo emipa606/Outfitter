@@ -81,7 +81,7 @@ internal static class HarmonyPatches
     {
         var fieldInfo =
             typeof(Pawn_WorkSettings).GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance);
-        var pawn = (Pawn) fieldInfo?.GetValue(__instance);
+        var pawn = (Pawn)fieldInfo?.GetValue(__instance);
         if (pawn != null)
         {
             pawn.GetSaveablePawn().ForceStatUpdate = true;

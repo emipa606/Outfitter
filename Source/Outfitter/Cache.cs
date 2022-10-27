@@ -5,59 +5,58 @@ using JetBrains.Annotations;
 using RimWorld;
 using Verse;
 
-namespace Outfitter
+namespace Outfitter;
+
+public static class Cache
 {
-    public static class Cache
+    // ReSharper disable once FieldCanBeMadeReadOnly.Global
+    public static Dictionary<Apparel, ApparelEntry> ApparelEntries = new Dictionary<Apparel, ApparelEntry>();
+
+    public static readonly Dictionary<Apparel, FloatRange> InsulationDict = new Dictionary<Apparel, FloatRange>();
+
+    public static float GetEquippedStatValue([NotNull] this Apparel apparel, Pawn pawn, StatDef stat)
     {
-        // ReSharper disable once FieldCanBeMadeReadOnly.Global
-        public static Dictionary<Apparel, ApparelEntry> ApparelEntries = new Dictionary<Apparel, ApparelEntry>();
+        var baseStat = pawn.def.statBases.GetStatValueFromList(stat, stat.defaultBaseValue);
+        var equippedStatValue = apparel.def.equippedStatOffsets.GetStatOffsetFromList(stat);
 
-        public static readonly Dictionary<Apparel, FloatRange> InsulationDict = new Dictionary<Apparel, FloatRange>();
-
-        public static float GetEquippedStatValue([NotNull] this Apparel apparel, Pawn pawn, StatDef stat)
+        if (!ApparelStatCache.SpecialStats.Contains(stat) && Math.Abs(baseStat) > 0f)
         {
-            var baseStat = pawn.def.statBases.GetStatValueFromList(stat, stat.defaultBaseValue);
-            var equippedStatValue = apparel.def.equippedStatOffsets.GetStatOffsetFromList(stat);
-
-            if (!ApparelStatCache.SpecialStats.Contains(stat) && Math.Abs(baseStat) > 0f)
-            {
-                return ((baseStat + equippedStatValue) / baseStat) - 1;
-            }
-
-            return equippedStatValue;
-
-            // float pawnStat = p.GetStatValue(stat);
-            // var x = pawnStat;
-            // if (!p.apparel.WornApparel.Contains(apparel))
-            // {
-            // x += currentStat;
-            // }
-            // currentStat += apparel.def.equippedStatOffsets.GetStatOffsetFromList(stat.StatDef);
-
-            // if (stat.StatDef.defName.Equals("PsychicSensitivity"))
-            // {
-            // return apparel.def.equippedStatOffsets.GetStatOffsetFromList(stat.StatDef) - baseStat;
-            // }
-            // return equippedStatValue;
+            return ((baseStat + equippedStatValue) / baseStat) - 1;
         }
 
-        public static SaveablePawn GetSaveablePawn(this Pawn pawn)
+        return equippedStatValue;
+
+        // float pawnStat = p.GetStatValue(stat);
+        // var x = pawnStat;
+        // if (!p.apparel.WornApparel.Contains(apparel))
+        // {
+        // x += currentStat;
+        // }
+        // currentStat += apparel.def.equippedStatOffsets.GetStatOffsetFromList(stat.StatDef);
+
+        // if (stat.StatDef.defName.Equals("PsychicSensitivity"))
+        // {
+        // return apparel.def.equippedStatOffsets.GetStatOffsetFromList(stat.StatDef) - baseStat;
+        // }
+        // return equippedStatValue;
+    }
+
+    public static SaveablePawn GetSaveablePawn(this Pawn pawn)
+    {
+        var outfitter = Current.Game.GetComponent<GameComponent_Outfitter>();
+        foreach (var c in outfitter.PawnCache.Where(c => c.Pawn == pawn))
         {
-            var outfitter = Current.Game.GetComponent<GameComponent_Outfitter>();
-            foreach (var c in outfitter.PawnCache.Where(c => c.Pawn == pawn))
-            {
-                return c;
-            }
-
-            var n = new SaveablePawn {Pawn = pawn};
-            outfitter.PawnCache.Add(n);
-            return n;
-
-            // if (!PawnApparelStatCaches.ContainsKey(pawn))
-            // {
-            // PawnApparelStatCaches.Add(pawn, new StatCache(pawn));
-            // }
-            // return PawnApparelStatCaches[pawn];
+            return c;
         }
+
+        var n = new SaveablePawn { Pawn = pawn };
+        outfitter.PawnCache.Add(n);
+        return n;
+
+        // if (!PawnApparelStatCaches.ContainsKey(pawn))
+        // {
+        // PawnApparelStatCaches.Add(pawn, new StatCache(pawn));
+        // }
+        // return PawnApparelStatCaches[pawn];
     }
 }

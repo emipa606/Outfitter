@@ -1,13 +1,12 @@
-namespace Outfitter.Enums
+namespace Outfitter.Enums;
+
+public enum StatAssignment
 {
-    public enum StatAssignment
-    {
-        Manual,
+    Manual,
 
-        Override,
+    Override,
 
-        Individual,
+    Individual,
 
-        Automatic
-    }
+    Automatic
 }

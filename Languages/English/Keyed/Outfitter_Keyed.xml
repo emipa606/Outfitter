@@ -35,6 +35,7 @@
   <OutfitterWornByCorpse>Worn by corpse</OutfitterWornByCorpse>
   <OutfitterQuality>Quality modifier</OutfitterQuality>
   <OutfitterHumanLeather>Human leather</OutfitterHumanLeather>
+  <Settings.CurrentModVersion>Installed mod-version: {0}</Settings.CurrentModVersion>
   <Settings.UseEyes>Patch eyes and teeth to enable multiple head gear</Settings.UseEyes>
   <Settings.UseEyesTooltip>Enabling this removes the FullHead body part group from both eyes and the jaw. Use at your own risk.</Settings.UseEyesTooltip>
   <Settings.UseTailorWorkbenchUI>Use custom categorized bills for apparel on workbenches</Settings.UseTailorWorkbenchUI>

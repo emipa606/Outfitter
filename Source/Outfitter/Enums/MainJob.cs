@@ -1,39 +1,38 @@
-﻿namespace Outfitter.Enums
+﻿namespace Outfitter.Enums;
+
+public enum MainJob
 {
-    public enum MainJob
-    {
-        Anything,
+    Anything,
 
-        Soldier00CloseCombat,
+    Soldier00CloseCombat,
 
-        Soldier00RangedCombat,
+    Soldier00RangedCombat,
 
-        Artist,
+    Artist,
 
-        Constructor,
+    Constructor,
 
-        Cook,
+    Cook,
 
-        Crafter,
+    Crafter,
 
-        Doctor,
+    Doctor,
 
-        Grower,
+    Grower,
 
-        Handler,
+    Handler,
 
-        Hauler,
+    Hauler,
 
-        Hunter,
+    Hunter,
 
-        Miner,
+    Miner,
 
-        Researcher,
+    Researcher,
 
-        Smith,
+    Smith,
 
-        Tailor,
+    Tailor,
 
-        Warden
-    }
+    Warden
 }
